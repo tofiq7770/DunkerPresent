@@ -1,0 +1,115 @@
+﻿@using DunkerFinal.ViewModels.Products
+@model ProductsListVM
+
+
+
+<style>
+
+/* Center the pagination container */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Adjust margin as needed */
+}
+
+/* Style the pagination list */
+.pagination {
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+/* Style each page item */
+.page-item {
+    margin: 0 2px; /* Adjust spacing between items */
+}
+
+/* Style the links */
+.page-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 0.25rem;
+    color: black; /* Bootstrap primary color */
+    text-decoration: none;
+    background-color: #fff; /* White background */
+    transition: background-color 0.2s, color 0.2s; /* Smooth transitions */
+}
+
+.page-link:hover {
+    background-color: #e9ecef; /* Light gray background on hover */
+    color: #0056b3; /* Darker color on hover */
+}
+
+.page-item.active .page-link {
+    background-color: black; /* Active page color */
+    border-color: gray; /* Match border color */
+    color: #fff; /* White text color */
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d; /* Gray color for disabled state */
+    pointer-events: none; /* Disable clicks */
+    background-color: #fff; /* White background for disabled */
+    border-color: #ddd; /* Light border color */
+} 
+
+</style>
+<div class="col-lg-9 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <a class="btn btn-success" asp-area="Admin" asp-controller="Product" asp-action="Create">Create Product</a>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th> Image </th>
+                        <th> Name </th>
+                        <th> SKU </th>
+                        <th> Price </th>
+                        <th> Settings </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Products)
+                    {
+                        <tr>
+                            <td>
+                                <img style="width: 159px; height: 159px;  object-fit: cover;"
+                                 src="~/assets/img/@item.ProductImages.FirstOrDefault(m => m.IsMain)?.Image">
+                            </td>
+                            <td> @item.Name </td>
+                            <td> @item.SKU </td>
+                            <td> @item.Price </td>
+                            <td>
+                                <a class="btn btn-info" asp-area="Admin" asp-controller="Product" asp-route-id="@item.Id" asp-action="Detail">Detail</a>
+                                <a class="btn btn-primary" asp-area="Admin" asp-controller="Product" asp-route-id="@item.Id" asp-action="Update">Update</a>
+                                <a class="btn btn-danger" asp-area="Admin" asp-controller="Product" asp-route-id="@item.Id" asp-action="Delete">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <!-- Pagination controls -->
+           <nav aria-label="Page navigation example" class="pagination-container">
+    <ul class="pagination">
+        <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+        </li>
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@i">@i</a>
+            </li>
+        }
+        <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+        </li>
+    </ul>
+</nav>
+
+        </div>
+    </div>
+</div>

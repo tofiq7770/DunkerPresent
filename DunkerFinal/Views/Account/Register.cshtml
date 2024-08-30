@@ -1,0 +1,241 @@
+﻿@using Service.ViewModels.Account
+@model RegisterVM
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+    .auth-form-light {
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        margin: auto;
+    }
+
+    .btn-custom {
+        background-color: #000000;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        padding: 12px 24px;
+        font-size: 18px;
+        font-weight: bold;
+        text-transform: uppercase;
+        transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+        .btn-custom:hover {
+            background-color: #333333;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+        }
+
+    .auth-link {
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+        .auth-link:hover {
+            text-decoration: underline;
+        }
+
+    .mb-4 {
+        margin-bottom: 1.5rem;
+    }
+
+    .my-3 {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .position-relative {
+        position: relative;
+    }
+
+    .btn-icon {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        margin-top: 14px;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        color: #6c757d;
+    }
+
+        .btn-icon:focus {
+            outline: none;
+        }
+
+    .form-group input {
+        padding-right: 40px;
+    }
+
+    .custom-button {
+        color: black;
+    }
+
+        .custom-button:hover {
+            color: white;
+        }
+
+    .centered-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .centered-button {
+        margin-top: 1rem;
+    }
+</style>
+
+<div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class=" ">
+            <div class="row flex-grow">
+                <div class="col-lg-4 mx-auto">
+                    <div class="auth-form-light text-left p-5">
+                      <div class="centered-container">
+                            <div class="brand-logo ">
+                            <img src="~/assets/img/Dunker-logo-dark.png">
+                        </div>
+                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <h4 class="mt-3">Hello! let's get started</h4>
+                        <h6 class="font-weight-light">Sign up to continue.</h6>
+                      </div>
+                        <form class="pt-3" method="post" asp-action="Register">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input asp-for="Username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                <span class="text-danger" asp-validation-for="Username"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input asp-for="Fullname" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                <span class="text-danger" asp-validation-for="Fullname"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input asp-for="Email" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                <span class="text-danger" asp-validation-for="Email"></span>
+                            </div>
+
+                            <div class="form-group position-relative">
+                                <label for="exampleInputPassword1">Password</label>
+                                <input asp-for="Password" class="form-control" id="exampleInputPassword1" type="password">
+                                <span class="text-danger" asp-validation-for="Password"></span>
+                                <button type="button" class="btn btn-icon" id="togglePassword">
+                                    <i class="fa fa-eye" id="passwordIcon"></i>
+                                </button>
+                            </div>
+
+                            <div class="form-group position-relative">
+                                <label>Confirm Password</label>
+                                <input asp-for="ConfirmPassword" class="form-control" id="confirmPassword" type="password">
+                                <span class="text-danger" asp-validation-for="ConfirmPassword"></span>
+                                <button type="button" class="btn btn-icon" id="toggleConfirmPassword">
+                                    <i class="fa fa-eye" id="confirmPasswordIcon"></i>
+                                </button>
+                            </div>
+
+                            <div class="centered-container mt-2">
+                                <a asp-action="ForgetPassword" asp-controller="Account" class="auth-link text-dark">Forgot password?</a>
+                                <button type="submit" class="btn custom-button centered-button">Submit</button>
+                            </div>
+                            <div class="text-center mt-4 font-weight-light">
+                                Have account? <a asp-action="Login" asp-controller="Account" class="text-primary">Login</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- content-wrapper ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Toggle visibility for Password
+        var togglePasswordButton = document.getElementById('togglePassword');
+        var passwordField = document.getElementById('exampleInputPassword1');
+        var passwordIcon = document.getElementById('passwordIcon');
+
+        togglePasswordButton.addEventListener('click', function () {
+            var isPasswordVisible = passwordField.type === 'text';
+
+            if (isPasswordVisible) {
+                passwordField.type = 'password';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            } else {
+                passwordField.type = 'text';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            }
+
+            // Optional AJAX request to log the action
+            $.ajax({
+                url: '/api/logAction',  // Change this URL to your server endpoint
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    action: 'togglePasswordVisibility',
+                    isVisible: !isPasswordVisible
+                }),
+                success: function(response) {
+                    console.log('Password visibility toggled:', response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error logging password visibility action:', error);
+                }
+            });
+        });
+
+        // Toggle visibility for Confirm Password
+        var toggleConfirmPasswordButton = document.getElementById('toggleConfirmPassword');
+        var confirmPasswordField = document.getElementById('confirmPassword');
+        var confirmPasswordIcon = document.getElementById('confirmPasswordIcon');
+
+        toggleConfirmPasswordButton.addEventListener('click', function () {
+            var isPasswordVisible = confirmPasswordField.type === 'text';
+
+            if (isPasswordVisible) {
+                confirmPasswordField.type = 'password';
+                confirmPasswordIcon.classList.remove('fa-eye-slash');
+                confirmPasswordIcon.classList.add('fa-eye');
+            } else {
+                confirmPasswordField.type = 'text';
+                confirmPasswordIcon.classList.remove('fa-eye');
+                confirmPasswordIcon.classList.add('fa-eye-slash');
+            }
+
+            // Optional AJAX request to log the action
+            $.ajax({
+                url: '/api/logAction',  // Change this URL to your server endpoint
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    action: 'toggleConfirmPasswordVisibility',
+                    isVisible: !isPasswordVisible
+                }),
+                success: function(response) {
+                    console.log('Confirm password visibility toggled:', response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error logging confirm password visibility action:', error);
+                }
+            });
+        });
+    });
+</script>

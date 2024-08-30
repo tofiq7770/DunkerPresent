@@ -1,0 +1,192 @@
+﻿@using Service.ViewModels.Account
+@model LoginVM
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+    /* General form container styling */
+    .auth-form-light {
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 500px; /* Increase the width of the form container */
+        margin: auto; /* Center horizontally */
+    }
+
+    /* Button styling */
+    .btn-custom {
+        background-color: #000000; /* Black color */
+        color: #ffffff; /* White text */
+        border: none;
+        border-radius: 5px;
+        padding: 12px 24px; /* Increase button size */
+        font-size: 18px; /* Increase font size */
+        font-weight: bold;
+        text-transform: uppercase;
+        transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+        .btn-custom:hover {
+            background-color: #333333; /* Darker black on hover */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+        }
+
+    /* Link styling */
+    .auth-link {
+        text-decoration: none;
+        font-size: 16px; /* Increase font size */
+        font-weight: 500;
+    }
+
+        .auth-link:hover {
+            text-decoration: underline;
+        }
+
+    /* Additional spacing and alignment tweaks */
+    .mb-4 {
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-custom {
+        background: black !important;
+        color: white !important;
+    }
+
+        .btn-custom:hover {
+            background: gray !important;
+            color: white !important;
+        }
+
+    .pt-3 {
+        padding-top: 1rem;
+    }
+
+    /* Center text and elements */
+    .text-center {
+        text-align: center;
+    }
+
+    /* Form alignment adjustments */
+    .content-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh; /* Full viewport height */
+    }
+
+    .row {
+        display: flex;
+        justify-content: center;
+    }
+    
+
+    .position-relative {
+        position: relative;
+    }
+
+    .btn-icon {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        color: #6c757d; /* Adjust color as needed */
+    }
+
+        .btn-icon:focus {
+            outline: none;
+        }
+
+    .form-group input {
+        padding-right: 40px; /* Space for the icon */
+    }
+
+</style>
+<div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="row flex-grow">
+            <div class="col-lg-12 col-12 mx-auto">
+                <div class="auth-form-light text-left p-5 border rounded shadow-lg">
+                    <div class="brand-logo mb-4 text-center">
+                        <img src="~/assets/img/Dunker-logo-dark.png" alt="Dunker Logo" class="img-fluid">
+                    </div>
+                    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                    <h4 class="mb-4 text-center">Hello! Let's get started</h4>
+                    <h6 class="font-weight-light mb-4 text-center">Sign up to continue.</h6>
+                    <form class="pt-3" method="post" asp-action="Login">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input asp-for="UserNameOrEmail" class="form-control" id="username" aria-describedby="emailHelp">
+                            <span class="text-danger" asp-validation-for="UserNameOrEmail"></span>
+                        </div>
+                        <div class="form-group position-relative">
+                            <label for="password">Password</label>
+                            <input asp-for="Password" class="form-control" id="password" type="password">
+                            <span class="text-danger" asp-validation-for="Password"></span>
+                            <button type="button" style="margin-top: 14px;" class="btn btn-icon" id="togglePassword">
+                                <i class="fa fa-eye" id="passwordIcon"></i>
+                            </button>
+                        </div>
+                        <div class="text-center my-3">
+                            <a asp-action="ForgetPassword" asp-controller="Account" class="auth-link text-dark">Forgot password?</a>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn custom-button">Submit</button>
+                        </div>
+                        <div class="text-center mt-4 font-weight-light">
+                            Don't have an account? <a asp-action="Register" asp-controller="Account" class="text-primary">Create</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+            var togglePasswordButton = document.getElementById('togglePassword');
+            var passwordField = document.getElementById('password');
+            var passwordIcon = document.getElementById('passwordIcon');
+
+            togglePasswordButton.addEventListener('click', function () {
+                var isPasswordVisible = passwordField.type === 'text';
+
+                if (isPasswordVisible) {
+                    passwordField.type = 'password';
+                    passwordIcon.classList.remove('fa-eye-slash');
+                    passwordIcon.classList.add('fa-eye');
+                } else {
+                    passwordField.type = 'text';
+                    passwordIcon.classList.remove('fa-eye');
+                    passwordIcon.classList.add('fa-eye-slash');
+                }
+
+                // AJAX request to log the action (example URL)
+                $.ajax({
+                    url: '/api/logAction',  // Change this URL to your server endpoint
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        action: 'togglePasswordVisibility',
+                        isVisible: !isPasswordVisible
+                    }),
+                    success: function(response) {
+                        console.log('Password visibility toggled:', response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error logging password visibility action:', error);
+                    }
+                });
+            });
+        });
+</script>
+
+
+

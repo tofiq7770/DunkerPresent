@@ -1,0 +1,41 @@
+﻿@using Service.ViewModels.Color
+
+@model List<ColorListVM>
+
+
+<div class="col-lg-9 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <a class="btn btn-success" asp-area="Admin" asp-controller="Color" asp-action="Create">Create Color</a>
+
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        
+                        <th> Name </th>  
+                        <th> Color </th>  
+                        <th> Settings </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td> @item.Name </td> 
+                            <td> <i class="mdi mdi mdi mdi-invert-colors menu-icon" style=" font-size:30px; color:@item.Name"></i> </td> 
+
+                            <td>
+                                <a class="btn btn-info" asp-area="Admin" asp-controller="Color" asp-route-id="@item.Id" asp-action="Detail">Detail</a>
+                                <a class="btn btn-primary" asp-area="Admin" asp-controller="Color" asp-route-id="@item.Id" asp-action="Update">Update</a>
+                                <a class="btn btn-danger" asp-area="Admin" asp-controller="Color" asp-route-id="@item.Id" asp-action="Delete">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,254 @@
+.price-title {
+    color: black;
+    font-size: 12px;
+}
+
+.price-range {
+    width: 10px;
+    height: 0;
+    -webkit-appearance: none; /* Remove default styling */
+    background: black; /* Track color */
+    outline: none; /* Remove outline */
+}
+
+#featured-products .featured-products-container .featured-products-card .swiper {
+    height: 240px !important;
+}
+
+.price-range::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Remove default styling */
+    appearance: none;
+    width: 12px; /* Thumb width */
+    height: 12px; /* Thumb height */
+    background: black; /* Thumb color */
+    cursor: pointer; /* Cursor style */
+}
+
+.price-range::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: black;
+    cursor: pointer;
+}
+
+.price-output {
+    color: black;
+    font-size: 12px;
+}
+
+
+.accordion-button:not(.collapsed) {
+    color: black;
+    background-color: rgb(245, 245, 245);
+    box-shadow: inset 0 calc(-1* var(--bs-accordion-border-width)) 0 gray;
+}
+
+.add-to-fav-button {
+    position: absolute;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+    z-index: 2 !important;
+    transition: 0.4s ease-in;
+}
+
+.accordion-button:focus {
+    z-index: 3;
+    border-color: black;
+    outline: 0;
+    box-shadow: none !important;
+}
+
+.results {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.price-slider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input[type=range] {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.price-values {
+    width: 100%;
+}
+
+.accordion-body .form-check-label {
+    cursor: pointer;
+    padding: 5px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    transition: background-color 0.3s;
+}
+
+.accordion-body .form-check-input {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+    .accordion-body .form-check-input:checked {
+        background-color: #000;
+        border-color: #000;
+    }
+
+/* Hover effect for better visual feedback */
+.accordion-body .form-check-label:hover {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+/* Style the range slider's track and thumb (circle) */
+.price-slider input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: background 0.3s;
+}
+
+#featured-products {
+    padding: 67px 31px !important;
+}
+
+/* Track style */
+.price-slider input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8px;
+    cursor: pointer;
+    background: #ddd;
+    border-radius: 5px;
+}
+
+/* Thumb (circle) style */
+.price-slider input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #000;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #333;
+    margin-top: -6px;
+    /* Centers the thumb relative to the track */
+    transition: background 0.3s;
+}
+
+    /* Hover and active states for thumb */
+    .price-slider input[type="range"]::-webkit-slider-thumb:hover {
+        background: #555;
+    }
+
+    .price-slider input[type="range"]::-webkit-slider-thumb:active {
+        background: #333;
+    }
+
+/* Firefox specific styles */
+.price-slider input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #000;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #333;
+}
+
+.price-slider input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: 8px;
+    background: #ddd;
+    border-radius: 5px;
+}
+
+/* IE/Edge specific styles */
+.price-slider input[type="range"]::-ms-thumb {
+    width: 20px;
+    height: 20px;
+    background: #000;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #333;
+}
+
+.price-slider input[type="range"]::-ms-track {
+    width: 100%;
+    height: 8px;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+}
+
+.price-slider input[type="range"]::-ms-fill-lower {
+    background: #ddd;
+    border-radius: 5px;
+}
+
+.price-slider input[type="range"]::-ms-fill-upper {
+    background: #ddd;
+    border-radius: 5px;
+}
+
+/* Value labels style */
+.price-slider .price-values span {
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+}
+
+.dropdown-toggle {
+    font-weight: bold;
+    color: #000;
+}
+
+.dropdown-menu {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+    font-size: 14px;
+    color: #888;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+    .dropdown-item:hover,
+    .dropdown-item.active {
+        color: #000;
+        background-color: transparent;
+    }
+
+    .dropdown-item.active {
+        color: #000;
+        font-weight: bold;
+    }
+
+    .dropdown-item + .dropdown-item {
+        margin-top: 5px;
+    }
+
+.btn-check:checked + .btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check) + .btn:active {
+    color: var(--bs-btn-active-color);
+    background-color: var(--bs-btn-active-bg);
+    border-color: white !important;
+}

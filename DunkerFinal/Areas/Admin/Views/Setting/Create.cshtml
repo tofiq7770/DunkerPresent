@@ -1,0 +1,27 @@
+﻿@using Service.ViewModels.Setting
+@model SettingCreateVM
+ 
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Create Setting</h4>
+            <form class="forms-sample" method="post" enctype="multipart/form-data">
+                
+         
+                <div class="form-group">
+                    <label asp-for="Key">Key</label>
+                    <input asp-for="Key" class="form-control" placeholder="Key">
+                    <span class="text-danger" asp-validation-for="Key"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Value">Value</label>
+                    <input asp-for="Value" class="form-control" placeholder="Value">
+                    <span class="text-danger" asp-validation-for="Value"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <a asp-action="Index" asp-controller="Setting" class="btn btn-light">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

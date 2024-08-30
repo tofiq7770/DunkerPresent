@@ -1,0 +1,29 @@
+﻿@model Contact
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Contact Details</h4>
+            <hr>
+            <div class="mb-4">
+                <p><b>Name:</b> @Model.Name</p>
+                <p><b>Email:</b> @Model.Email</p>
+                <p><b>Message:</b> @Model.Message</p>
+            </div>
+
+            <div class="mt-4 d-flex justify-content-between">
+                <a class="btn btn-secondary" asp-area="Admin" asp-controller="Contact" asp-action="Index">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+                <div> 
+                    <a class="btn btn-danger" asp-area="Admin" asp-controller="Contact" asp-route-id="@Model.Id" asp-action="Delete">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FontAwesome for icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">

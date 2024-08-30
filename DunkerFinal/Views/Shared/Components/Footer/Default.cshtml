@@ -1,0 +1,132 @@
+﻿ @using Service.ViewModels.Setting
+@model List<SettingListVM>
+
+    <!-- Footer Start -->
+    <footer id="footer">
+      <div class="content">
+        <div class="content-bottom">
+          <div class="row align-items-center">
+            <div class="content-logo col-lg-3 col-md-6 col-12">
+              <img
+                src="https://dunker.qodeinteractive.com/wp-content/uploads/2023/02/Dunker-logo-dark.png"
+                alt=""
+              />
+            </div>
+            <div class="services col-lg-3 col-md-6 col-12">
+              <div>
+                <svg
+                  height="52.759"
+                  width="61.39"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M61.38 9.621a1.192 1.192 0 0 0-.038-.224 1.2 1.2 0 0 0-.027-.085 1.264 1.264 0 0 0-.1-.222c-.008-.013-.011-.028-.018-.04L55.708.568a1.239 1.239 0 0 0-1.042-.567H6.735a1.24 1.24 0 0 0-1.042.568L.205 9.05c-.008.014-.012.03-.02.044a1.187 1.187 0 0 0-.1.216.765.765 0 0 0-.028.091 1.15 1.15 0 0 0-.037.214.749.749 0 0 0-.008.083v41.825a1.242 1.242 0 0 0 1.241 1.24h58.909a1.241 1.241 0 0 0 1.24-1.24V9.695c0-.01-.02-.05-.022-.074Zm-58.9 1.342h16.461v9.633a1.242 1.242 0 0 0 1.241 1.241h21.023a1.242 1.242 0 0 0 1.241-1.241v-9.633h16.462v39.315H2.479Zm18.943 0h18.543v8.392H21.423Zm17.47-2.481h-16.4l3.984-6h8.429Zm2.978 0-3.985-6h16.1l3.884 6Zm-22.356 0h-16l3.885-6h16.1Z"
+                  ></path>
+                </svg>
+              </div>
+              <span>FREE SHIPPING & RETURN POLICY</span>
+            </div>
+            <div class="services col-lg-3 col-md-6 col-12">
+              <div>
+                <svg
+                  height="60.333"
+                  width="69.29"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M66.153 21.784h-7.676a23.929 23.929 0 0 0-47.665 0H3.137a3.141 3.141 0 0 0-3.138 3.138V40.03a3.141 3.141 0 0 0 3.138 3.138h7.739a19.587 19.587 0 0 0 2.547 7.3 13.91 13.91 0 0 0 5.1 4.865c3.661 2.041 8.116 2.475 11.838 2.539a3.131 3.131 0 0 0 3.055 2.462h5.365a3.13 3.13 0 0 0 3.126-3.126v-1.127a3.13 3.13 0 0 0-3.126-3.127h-5.365a3.132 3.132 0 0 0-3.05 2.442c-3.414-.062-7.453-.45-10.637-2.226-3.728-2.078-5.867-5.781-6.541-11.318V23.93a21.456 21.456 0 0 1 42.911 0v18a1.237 1.237 0 0 0 1.237 1.237h8.816a3.141 3.141 0 0 0 3.137-3.138V24.921a3.141 3.141 0 0 0-3.136-3.137ZM10.716 35.151v5.543H3.138a.673.673 0 0 1-.664-.664V24.921a.672.672 0 0 1 .664-.663h7.578Zm22.049 20.93a.661.661 0 0 1 .652-.652h5.365a.66.66 0 0 1 .652.652v1.125a.66.66 0 0 1-.652.652h-5.365a.661.661 0 0 1-.652-.652ZM66.816 40.03a.673.673 0 0 1-.663.664h-7.579V24.258h7.579a.672.672 0 0 1 .663.663Z"
+                  ></path>
+                </svg>
+              </div>
+              <span>90-DAY WARRANTY</span>
+            </div>
+            <div class="services col-lg-3 col-md-6 col-12">
+              <div>
+                <svg
+                  height="45.97"
+                  width="65.588"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10.367 24.223h16.482a1.237 1.237 0 0 0 0-2.475H10.367a1.237 1.237 0 0 0 0 2.475Z"
+                  ></path>
+                  <path
+                    d="M61.853 0H3.734A3.739 3.739 0 0 0-.001 3.735v38.5a3.739 3.739 0 0 0 3.735 3.735h58.119a3.739 3.739 0 0 0 3.735-3.735v-38.5A3.739 3.739 0 0 0 61.853 0Zm1.261 42.236a1.262 1.262 0 0 1-1.261 1.261H3.734a1.262 1.262 0 0 1-1.26-1.261V15.942H63.11Zm0-28.767H2.475V3.735a1.262 1.262 0 0 1 1.26-1.261h58.119a1.262 1.262 0 0 1 1.261 1.261Z"
+                  ></path>
+                </svg>
+              </div>
+              <span>NEW PRODUCT OFFERINGS & DEALS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section-container">
+        <div class="middle-footer">
+          <div class="row">
+            <div class="col-lg-6 col-12 p-lg-0 pb-5">
+              <div class="footer-form">
+                <h5>NEWSLETTER</h5>
+                <p>
+                  Dunker has all of the best products from all of the top
+                  brands.
+                </p>
+                <div class="form-email">
+                  <input
+                    type="email"
+                    class="send-email"
+                    placeholder="YOUR EMAIL"
+                  />
+                  <span class="arrow-right">
+                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="location col-lg-3 col-md-6 col-12">
+              <h5>@Model.FirstOrDefault(m=>m.Key=="City").Value.ToString()</h5>
+              <address>
+                <h6 class="footer-heading">
+                  <a href="tel:+738115709479">@Model.FirstOrDefault(m=>m.Key=="Number").Value.ToString()</a>
+                </h6>
+                <h6 class="footer-heading">
+                  <a href="#">
+                    @Model.FirstOrDefault(m=>m.Key=="Location").Value.ToString()
+                  </a>
+                </h6>
+                <h6 class="footer-heading">
+                  <a href="#">@Model.FirstOrDefault(m=>m.Key=="Date").Value.ToString()</a>
+                </h6>
+              </address>
+            </div>
+            <div class="location col-lg-3 col-md-6 col-12">
+              <h5>@Model.FirstOrDefault(m=>m.Key=="City").Value.ToString()</h5>
+              <address>
+                <h6 class="footer-heading">
+                  <a href="tel:+738115709479">@Model.FirstOrDefault(m=>m.Key=="Number").Value.ToString()</a>
+                </h6>
+                <h6 class="footer-heading">
+                  <a href="#">
+                    @Model.FirstOrDefault(m=>m.Key=="Location").Value.ToString()
+                  </a>
+                </h6>
+                <h6 class="footer-heading">
+                  <a href="#">@Model.FirstOrDefault(m=>m.Key=="Date").Value.ToString()</a>
+                </h6>
+              </address>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-footer">
+        <div class="container">
+          <div class="copyright">
+            <span>
+              © 2023
+              <a href="#">Qode Interactive</a>
+              , All Rights Reserved
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- Footer End -->

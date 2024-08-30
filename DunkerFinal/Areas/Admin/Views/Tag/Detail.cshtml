@@ -1,0 +1,17 @@
+﻿@using Service.ViewModels.Tag
+@model TagUpdateVM
+  
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            
+    <p><b>Name</b>: @Model.Name</p>
+
+    <div class=mt-4>
+
+        <a class="btn btn-primary" asp-area="Admin" asp-controller="Tag" asp-action="Index">Back</a>
+        <a class="btn btn-primary" asp-area="Admin" asp-controller="Tag" asp-route-id="@Model.Id" asp-action="Update">Update</a>
+        <a class="btn btn-danger" asp-area="Admin" asp-controller="Tag" asp-route-id="@Model.Id" asp-action="Delete">Delete</a>
+    </div>
+</div>
+</div>

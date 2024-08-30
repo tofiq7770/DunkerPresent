@@ -1,0 +1,367 @@
+﻿@using Domain.Entities
+@using DunkerFinal.ViewModels.Shop
+
+@model ShopVM
+
+
+<style>
+
+    .add-to-basket-button {
+        font-size: 14px !important;
+        padding: 20px 70px !important;
+        background: transparent !important;
+        border: 2px solid #000 !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        transition: background-color 0.4s ease-in !important, color 0.4s ease-in !important;
+        position: unset !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        white-space: nowrap !important; /* Ensure text does not wrap */
+    }
+
+    .add-to-basket-button {
+        width: 55px !important;
+        height: 55px !important;
+        background-color: white !important;
+        border: none !important;
+        border-radius: 0 !important;
+    }
+
+        .add-to-basket-button span {
+            margin-right: 8px !important; /* Adjust spacing between text and icon */
+            display: inline-block !important; /* Ensure the span acts as an inline element */
+            white-space: nowrap !important; /* Prevent line breaks within the span */
+        }
+
+        .add-to-basket-button:hover {
+            background-color: #000 !important;
+            color: #fff !important;
+        }
+
+</style>
+<!-- Breadcrumb Navigation Start -->
+<nav id="breadcrumb">
+    <span><a asp-action="index" asp-controller="Home">HOME</a></span>
+    <span class="line">|</span>
+    <span><a asp-action="index" asp-controller="Home" class="text-dark">@Model.Product.Name</a></span>
+</nav>
+<!-- Breadcrumb Navigation End -->
+<!-- Main Start -->
+<main id="main">
+    <!-- Detail Product Section Start -->
+    <section id="detail-product">
+        <div class="row g-5">
+            <div class="col-lg-6 col-12" style="width:44%;">
+                <div class="image-gallery">
+                    <div class="zoom-img">
+                        <div class="zoomist-container">
+                            <!-- zoomist-wrapper is required -->
+                            <div class="zoomist-wrapper">
+                                <!-- zoomist-image is required -->
+                                <div class="zoomist-image">
+                                    <img src="~/assets/img/@Model.Product.ProductImages.FirstOrDefault(m=>m.IsMain).Image"
+                                         alt="Product"
+                                         id="zoom-img" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gallery-items">
+                        @if (Model.Product.ProductImages.Count() > 1)
+                        {
+                            @foreach (var item in Model.Product.ProductImages)
+                            {
+                                <div class="gallery-item">
+                                    <img src="~/assets/img/@item.Image"
+                                 alt="Product"
+                                 class="gallery-img" />
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-12">
+                <div class="product-content">
+                    <div class="product-heading">
+                        <h1>@Model.Product.Name</h1>
+                        <span>$@Model.Product.Price</span>
+                        <p>
+                            @Model.Product.Description
+                        </p>
+                    </div>
+                    <div class="product-actions">
+                        <button class="add-to-basket-button" data-product-id="@Model.Product.Id">
+                            <span>ADD TO CART</span> <i class="fa-solid fa-basket-shopping"></i>
+                        </button>
+
+                    </div>
+                    <div class="product-info">
+                        <div class="share">
+                            <a href="#" class="fs-5 py-5 d-inline-block">
+                                <i class="fa-solid fa-square-share-nodes"></i>
+                            </a>
+                        </div>
+                        <div class="product-stats">
+                            <div class="sku">
+                                <span>SKU:</span>
+                                <a href="#">@Model.Product.SKU</a>
+                            </div>
+                            <div class="category">
+                                <span>CATEGORY:</span>
+                                <a href="#">@Model.Product.Category.Name </a>
+                            </div>
+                            <div class="category">
+                                <span>BRAND:</span>
+                                <a href="#">@Model.Product.Brand.Name  </a>
+                            </div>
+                            <div class="tag">
+                                <span>TAG:</span>
+                                <a href="#"> @string.Join(", ", Model.Product.ProductTags.Select(m => m.Tag.Name))</a>
+                            </div>
+                            <div class="tag">
+                                <span>Color:</span>
+                                <a href="#"> @string.Join(", ", Model.Product.ProductColors.Select(m => m.Color.Name))</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 pt-5">
+                <div class="product-description">
+                    <div class="product-description-header">
+                        <ul class="tab-items" id="tabItems" style="list-style: none; display: flex; padding: 0; margin: 0; border-bottom: 2px solid #e2e2e2;">
+                            <li class="tab-item" style="margin-right: 30px;">
+                                <a href="#" class="tab-link" data-tab="description" style="text-decoration: none; font-size: 16px; color: #333; padding-bottom: 10px; display: inline-block; border-bottom: 3px solid transparent;">DESCRIPTION</a>
+                            </li>
+                            <li class="tab-item">
+                                @{
+                                    var reviewCount = Model.Product.Reviews?.Count ?? 0;
+                                }
+
+                                <a href="#" class="tab-link tab-links" data-tab="additional-info" style="text-decoration: none; font-size: 16px; color: #333; padding-bottom: 10px; display: inline-block; border-bottom: 3px solid transparent;">
+                                    REVIEWS <span id="reviewCount">@reviewCount</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tabs-content pt-4" id="tabContent">
+                        <div class="tab" data-tab="description">
+                            <p class="fs-5" style="font-size: 18px; line-height: 1.6; color: #555;">
+                                @Model.Product.Description
+                            </p>
+                        </div>
+                        <div class="tab d-none" data-tab="additional-info">
+                            <div class="product-stats">
+                                <div class="container mt-5">
+                                    <div id="reviewContainer">
+                                        @if (Model.Product.Reviews != null && Model.Product.Reviews.Any())
+                                        {
+                                            @foreach (var item in Model.Product.Reviews)
+                                            {
+                                                <div class="review" style="margin-bottom: 30px; padding: 20px; border: 1px solid #e2e2e2; border-radius: 8px; background-color: #f9f9f9;">
+                                                    <div class="d-flex align-items-start">
+                                                        <img src="~/assets/img/User.png" alt="User Avatar" class="rounded-circle mr-3" style="width: 70px; height: 70px; object-fit: cover; margin-right: 20px;">
+                                                        <div>
+                                                            <p class="mb-1 text-muted" style="margin: 0; color: #777; font-size: 14px;">@item.CreatedTime.ToString("MMMM dd, yyyy")</p>
+                                                            <h5 class="font-weight-bold mb-1" style="margin: 5px 0; font-size: 18px; color: #333;">@item.AppUser.FullName</h5>
+                                                            <p style="font-size: 16px; color: #555; margin-bottom: 10px;">
+                                                                @item.Message
+                                                            </p>
+                                                            <div class="stars" style="font-size: 18px;">
+                                                             @*      @for (int i = 1; i <= 5; i++)
+                                                                    {
+                                                                    <span class="text-warning" style="color: @(i <= item.Product.Rating ? "#ffc107" : "#e2e2e2");">&#9733;</span>
+                                                                    } *@
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form for adding a review -->
+            <form id="reviewForm" method="post" action="@Url.Action("AddComment", "Shop")">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="productId" name="productId" value="@Model.Product.Id">
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="name">Your Name *</label>
+                        <input type="text" class="form-control" id="name" name="name" value="@Model.UserName" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="email">Your Email *</label>
+                        <input type="email" class="form-control" id="email" name="email" value="@Model.UserEmail" placeholder="Your Email" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="review">Your Review *</label>
+                    <textarea class="form-control" id="review" name="message" rows="4" placeholder="Your Review" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="rating">Please rate:</label>
+                    <div id="rating">
+                      @*  @for (int i = 1; i <= 5; i++)
+                        {
+                            <input type="radio" id="rating@i" name="rating" value="@i" required />
+                            <label for="rating@i" class="text-secondary" style="font-size: 18px;">&#9733;</label>
+                        }*@ 
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-outline-success">Post Comment</button>
+            </form>
+             
+
+
+
+
+        </div>
+    </section>
+    <!-- Detail Product Section End -->
+    <!-- Related Products Section Start -->
+    @*  <section id="related-products">
+        <div class="title">
+        <h2>RELATED PRODUCTS</h2>
+        </div>
+        <div class="featured-products-container">
+        <div class="row justify-content-center">
+        </div>
+        </div>
+        </section>*@
+</main>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+             $('#reviewForm').on('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        let formData = $(this).serialize(); // Serialize form data
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                if (response.success) {
+                    let reviewHtml = `
+                        <div class="review" style="margin-bottom: 30px; padding: 20px; border: 1px solid #e2e2e2; border-radius: 8px; background-color: #f9f9f9;">
+                            <div class="d-flex align-items-start">
+                                <img src="/assets/img/User.png" alt="User Avatar" class="rounded-circle mr-3" style="width: 70px; height: 70px; object-fit: cover; margin-right: 20px;">
+                                <div>
+                                    <p class="mb-1 text-muted" style="margin: 0; color: #777; font-size: 14px;">${new Date().toLocaleDateString()}</p>
+                                    <h5 class="font-weight-bold mb-1" style="margin: 5px 0; font-size: 18px; color: #333;">${$('#name').val()}</h5>
+                                    <p style="font-size: 16px; color: #555; margin-bottom: 10px;">${$('#review').val()}</p>
+                                    <div class="stars" style="font-size: 18px;">
+                                        ${'<span class="text-warning" style="color: #ffc107;">&#9733;</span>'.repeat($('input[name="rating"]:checked').val())}
+                                        ${'<span class="text-secondary">&#9733;</span>'.repeat(5 - $('input[name="rating"]:checked').val())}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    $('#reviewContainer').prepend(reviewHtml);
+                    $('#reviewForm')[0].reset();
+                    updateReviewCount();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('An error occurred: ' + error);
+            }
+        });
+    });
+
+    function updateReviewCount() {
+        let reviewCount = $('#reviewContainer .review').length;
+        $('#reviewCount').text(reviewCount);
+    }
+
+
+
+</script>
+
+
+<script>
+
+    document.querySelectorAll('.add-to-basket-button').forEach(button => {
+           button.addEventListener('click', async function () {
+               const productId = this.getAttribute('data-product-id');
+
+               try {
+                   const response = await fetch('/Basket/Add', {
+                       method: 'POST',
+                       headers: {
+                           'Content-Type': 'application/json',
+                           'X-Requested-With': 'XMLHttpRequest'
+                       },
+                       body: JSON.stringify(productId)
+                   });
+
+                   const result = await response.json();
+
+                   if (response.ok) {
+                       if (result.redirectUrl) {
+                           // Handle redirection if provided
+                           Swal.fire({
+                               title: 'Login Required',
+                               text: 'You need to be logged in to add items to your basket.',
+                               icon: 'warning',
+                               showConfirmButton: true,
+                               confirmButtonText: 'Login',
+                               onClose: () => {
+                                   window.location.href = result.redirectUrl; // Redirect to login
+                               }
+                           });
+                       } else {
+                           Swal.fire({
+                               title: 'Success!',
+                               text: result.message,
+                               icon: 'success',
+                               timer: 1200,
+                               showConfirmButton: false
+                           });
+
+                           document.querySelector('.count-basket').textContent = result.uniqueProductCount;
+
+                           updateBasketUI();
+                       }
+                   } else {
+                       Swal.fire({
+                           title: 'Error!',
+                           text: 'Failed to add product to basket. ' + result.message,
+                           icon: 'error',
+                           timer: 1200,
+                           showConfirmButton: false
+                       });
+                   }
+               } catch (error) {
+                   console.error('Network error:', error);
+                   Swal.fire({
+                       title: 'Network Error!',
+                       text: 'An error occurred. Please try again.',
+                       icon: 'error',
+                       timer: 1200,
+                       showConfirmButton: false
+                   });
+               }
+           });
+       });
+
+       function updateBasketUI() {
+           // Implement this function to refresh the basket display, count items, etc.
+       }
+
+</script>

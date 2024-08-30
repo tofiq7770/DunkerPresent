@@ -1,0 +1,253 @@
+﻿@using DunkerFinal.ViewModels.Contacts
+
+@model ContactCreateVM
+
+<style>
+    .overlay {
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: rgba(187, 187, 187, 0.9);
+        overflow-x: hidden;
+        overflow-y: hidden;
+        transition: 0.5s;
+        display: none;
+        z-index: 9999;
+    }
+
+    .overlay-content {
+        position: relative;
+        top: 25%;
+        width: 80%;
+        text-align: center;
+        margin-top: 30px;
+        margin: auto;
+    }
+
+    .overlay input[type="text"] {
+        padding: 15px;
+        font-size: 17px;
+        border: none;
+        width: 80%;
+        background: white;
+    }
+
+    .overlay button[type="button"] {
+        padding: 15px;
+        font-size: 17px;
+        border: none;
+        background: #000000;
+        color: rgb(255, 255, 255);
+        cursor: pointer;
+    }
+
+        .overlay button[type="button"]:hover {
+            background: #2d2d2d;
+        }
+
+    .closebtn {
+        position: absolute;
+        top: 20px;
+        right: 45px;
+        font-size: 60px;
+        cursor: pointer;
+        color: rgb(0, 0, 0);
+    }
+
+        .closebtn:hover {
+            color: #2d2d2d;
+        }
+
+    body.no-scroll {
+        overflow: hidden;
+    }
+
+    @@media screen and (max-width: 768px) {
+        .overlay-content {
+            top: 15%;
+            /* Adjust vertical position */
+            width: 90%;
+            /* Increase width for smaller screens */
+        }
+
+        .closebtn {
+            font-size: 30px;
+            /* Further reduce close button size */
+        }
+
+        .overlay input[type="text"],
+        .overlay button[type="button"] {
+            padding: 12px;
+            /* Reduce padding */
+            font-size: 16px;
+            /* Adjust font size */
+        }
+    }
+
+    @@media screen and (max-width: 480px) {
+        .overlay-content {
+            top: 10%;
+            /* Further adjust vertical position */
+        }
+
+        .overlay input[type="text"],
+        .overlay button[type="button"] {
+            padding: 10px;
+            /* Reduce padding */
+            font-size: 14px;
+            /* Further adjust font size */
+        }
+    }
+
+    .account-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .account-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 200px;
+        background-color: white;
+        border: 1px solid #ddd;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        padding: 10px;
+        z-index: 1000;
+    }
+
+    .account-container:hover .account-dropdown {
+        display: block;
+    }
+
+    .account-dropdown p {
+        margin: 0;
+        padding: 5px 0;
+    }
+
+    .account-dropdown .name {
+        font-weight: bold;
+    }
+
+    .account-dropdown .position {
+        font-size: 0.9em;
+        color: gray;
+    }
+
+    .account-dropdown .btn {
+        margin-top: 10px;
+        padding: 5px 10px;
+        background-color: #000000;
+        color: white;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+    }
+
+        .account-dropdown .btn:hover {
+            background-color: #3c3d3d;
+        }
+</style>
+<!-- Main Start -->
+<main id="main">
+
+    <!-- Contact Start -->
+    <div class="container-fluid contact py-5">
+        <div class="container py-5">
+            <div class="p-5 bg-light rounded">
+                <div class="row g-4">
+                    <div class="col-12">
+                        <div class="text-center mx-auto" style="max-width: 700px;">
+                            <h1 style="font-size: 70px;" class="text-dark">Get In Touch With Us</h1>
+                            <p class="mb-4">
+                                Whether you’re hitting the track or just out for a casual stroll, these shoes offer superior support and style. The lightweight construction ensures you stay agile, while the sleek design keeps you looking sharp.
+
+                                Care Instructions:
+                                To keep your shoes in top condition, wipe clean with a damp cloth and air dry. Avoid submerging in water and store in a cool, dry place.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="h-100 rounded">
+
+                            <iframe class="rounded w-100" style="height: 400px;"
+                                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1705.8100484275121!2d49.854453880491725!3d40.377671626023094!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40307d077c61fef3%3A0xfa4594c97092ca01!2sAF%20Business%20House!5e0!3m2!1sen!2sbd!4v1723540981106!5m2!1sen!2sbd"
+                                    width="800" height="600" style="border:0;" allowfullscreen="" loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <form id="contactForm" class="forms-sample" method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <input asp-for="Name" class="w-100 form-control border-0 py-3 mb-4" placeholder="Your Name">
+                                <span class="text-danger" asp-validation-for="Name"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <input asp-for="Email" type="email" class="w-100 form-control border-0 py-3 mb-4" placeholder="Enter Your Email">
+                                <span class="text-danger" asp-validation-for="Email"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <textarea asp-for="Message" class="w-100 form-control border-0 mb-4" rows="5" cols="10" placeholder="Your Message"></textarea>
+                                <span class="text-danger" asp-validation-for="Message"></span>
+                            </div>
+
+                            <button id="submitButton" class="w-100 btn form-control border-secondary py-3 bg-white text-dark" type="submit">Submit</button>
+                        </form>
+
+
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="d-flex p-4 rounded mb-4 bg-white">
+                            <i class="fas fa-map-marker-alt fa-2x text-dark me-4"></i>
+                            <div>
+                                <h4>Address</h4>
+                                <p class="mb-2">Azerbaijan, Baku </p>
+                            </div>
+                        </div>
+                        <div class="d-flex p-4 rounded mb-4 bg-white">
+                            <i class="fa-solid fa-envelope fa-2x text-dark me-4"></i>
+                            <div>
+                                <h4>Mail Us</h4>
+                                <p class="mb-2">info@example.com</p>
+                            </div>
+                        </div>
+                        <div class="d-flex p-4 rounded bg-white">
+                            <i class="fa-solid fa-phone fa-2x text-dark me-4"></i>
+                            <div>
+                                <h4>Telephone</h4>
+                                <p class="mb-2">7(382)157-09-474</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Contact End -->
+</main>
+<!-- Main End -->
+<script>
+    document.getElementById('contactForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        Swal.fire({
+            title: 'Success!',
+            text: 'Message was sent.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Optionally submit the form after the alert is closed
+                document.getElementById('contactForm').submit();
+            }
+        });
+    });
+</script>

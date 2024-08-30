@@ -1,0 +1,116 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     
+    <title>Dunker – Fashion and Clothing Shop Theme</title>
+    <link rel="shortcut icon"
+          href="~/assets/img/cropped-favicon-32x32.png"
+          type="image/x-icon" />
+    <link rel="shortcut icon"
+          href="~/assets/img/cropped-favicon-32x32.png"
+          type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jQuery.mmenu/9.3.0/mmenu.min.css"
+          integrity="sha512-nNatP1G6CEh43irXY/GN4cDcLRX/R0jAYAV/ulFZcotSXcuIQE5Do4TuDOYNAD2SCIpmIbaYSllyjTysSCkpEw=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+
+    <!-- Swiper -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+          crossorigin="anonymous" />
+
+    <!-- Add this in the <head> of your document -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-zoom/1.7.21/jquery.zoom.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-zoom/1.7.21/jquery.zoom.min.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="~/assets/css/main.css" />
+    <link rel="stylesheet" href="~/assets/css/shop.css" />
+
+</head>
+
+<body>
+
+    @await Component.InvokeAsync("Header")
+
+    @RenderBody()
+
+    @await Component.InvokeAsync("Footer")
+     
+
+
+
+      <script>
+
+        // search
+        function openSearch() {
+            document.getElementById("searchOverlay").style.display = "block";
+            document.body.classList.add("no-scroll"); // Prevent scrolling
+        }
+
+        function closeSearch() {
+            document.getElementById("searchOverlay").style.display = "none";
+            document.body.classList.remove("no-scroll"); // Allow scrolling again
+        }
+
+        function checkEnter(event) {
+            if (event.key === "Enter") {
+                performSearch();
+            }
+        }
+
+        function performSearch() {
+            var searchQuery = document.getElementById("searchInput").value;
+            alert("Search performed for: " + searchQuery);
+            closeSearch(); // Optionally close the search after performing it
+        }
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- SwiperJS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Split Type  -->
+    <script src="
+    https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js
+    "></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <!-- GSAP JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
+            integrity="sha512-16esztaSRplJROstbIIdwX3N97V1+pZvV33ABoG1H2OyTttBxEGkTsoIVsiP1iaTtM8b3+hu2kB6pQ4Clr5yug=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+
+    <!-- axios cdn  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.1/axios.min.js"></script>
+
+    <!-- generate card js  -->
+
+    <script src="~/assets/js/tab.js"></script>
+    <script src="~/assets/js/script.js"></script>
+
+    
+<script src="~/assets/js/shop.js"></script> 
+</body>
+</html>
+ 

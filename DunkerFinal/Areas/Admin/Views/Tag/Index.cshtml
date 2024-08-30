@@ -1,0 +1,36 @@
+﻿@using Service.ViewModels.Tag
+
+@model List<TagListVM>
+
+<div class="col-lg-9 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <a class="btn btn-success" asp-area="Admin" asp-controller="Tag" asp-action="Create">Create Tag</a>
+
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th> Name </th>
+                        <th> Settings </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td> @item.Name </td>
+                            <td>
+                                <a class="btn btn-info" asp-area="Admin" asp-controller="Tag" asp-route-id="@item.Id" asp-action="Detail">Detail</a>
+                                <a class="btn btn-primary" asp-area="Admin" asp-controller="Tag" asp-route-id="@item.Id" asp-action="Update">Update</a>
+                                <a class="btn btn-danger" asp-area="Admin" asp-controller="Tag" asp-route-id="@item.Id" asp-action="Delete">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

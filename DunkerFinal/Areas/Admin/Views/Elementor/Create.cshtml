@@ -1,0 +1,22 @@
+﻿@using Service.ViewModels.Elementor 
+
+@model ElementorCreateVM
+
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Create Elementor</h4>
+            <form class="forms-sample" method="post" enctype="multipart/form-data">
+               
+                <div class="form-group">
+                    <label asp-for="Image">Image</label>
+                    <input asp-for="Image" class="form-control">
+                    <span  class="text-danger mt-2" asp-validation-for="Image"></span>
+                </div>
+                <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
+                <a class="btn btn-light" asp-area="Admin" asp-controller="Elementor" asp-action="Index">Back</a>
+            </form>
+        </div>
+    </div>
+</div>

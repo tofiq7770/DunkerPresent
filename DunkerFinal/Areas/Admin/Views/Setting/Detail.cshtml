@@ -1,0 +1,16 @@
+﻿@using Service.ViewModels.Setting
+@model SettingUpdateVM
+ 
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            
+    <p><b>Key</b>: @Model.Key</p>
+    <p><b>Value</b>: @Model.Value</p>
+        <a class="btn btn-primary" asp-area="Admin" asp-controller="Setting" asp-action="Index">Back</a>
+        <a class="btn btn-primary" asp-area="Admin" asp-controller="Setting" asp-route-id="@Model.Id" asp-action="Update">Update</a>
+        <a class="btn btn-danger" asp-area="Admin" asp-controller="Setting" asp-route-id="@Model.Id" asp-action="Delete">Delete</a>
+    </div>
+</div>
+</div>

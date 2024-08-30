@@ -1,0 +1,25 @@
+﻿@using Service.ViewModels.Brand
+@model BrandUpdateVM
+
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Update Brand</h4>
+            <form class="forms-sample" method="post" enctype="multipart/form-data">
+                 <div class="form-group">
+                    <label asp-for="Name">Name</label>
+                    <input asp-for="Name" type="text" class="form-control" placeholder="Name">
+                    <span  class="text-danger mt-2" asp-validation-for="Name"></span>
+                </div> 
+                <div class="mt-3 form-group">
+                    <label asp-for="Photo">Image</label>
+                    <input asp-for="Photo" class="form-control">
+                    <span class="text-danger mt-2" asp-validation-for="Photo"></span>
+                </div>
+                <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
+                <a class="btn btn-light" asp-area="Admin" asp-controller="Brand" asp-action="Index">Back</a>
+            </form>
+        </div>
+    </div>
+</div>

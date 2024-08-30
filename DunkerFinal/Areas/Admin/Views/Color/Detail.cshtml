@@ -1,0 +1,18 @@
+﻿@using Service.ViewModels.Color
+@model ColorUpdateVM
+  
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            
+    <p><b>Name</b>: @Model.Name</p>
+    <div style="background-color:@Model.Name;width:100px;height:100px;"></div>
+
+    <div class=mt-4>
+
+        <a class="btn btn-primary" asp-area="Admin" asp-controller="Color" asp-action="Index">Back</a>
+        <a class="btn btn-primary" asp-area="Admin" asp-controller="Color" asp-route-id="@Model.Id" asp-action="Update">Update</a>
+        <a class="btn btn-danger" asp-area="Admin" asp-controller="Color" asp-route-id="@Model.Id" asp-action="Delete">Delete</a>
+    </div>
+</div>
+</div>

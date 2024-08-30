@@ -1,0 +1,263 @@
+﻿@using Service.ViewModels.Product
+@model ProductUpdateVM
+
+<style>
+    /* General Card Styling */
+    .card {
+
+        border-radius: 10px;
+    }
+
+    .card-body {
+        padding: 2rem;
+    }
+
+    /* Form Inputs Styling */
+    .form-control {
+        border-radius: 0.375rem;
+        padding: 0.75rem;
+        font-size: 1rem;
+        border: 1px solid #ced4da;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+    /* Image and Color Section Styling */
+    .img-thumbnail {
+        border-radius: 0.375rem;
+    }
+
+    .btn-danger, .btn-primary {
+        margin-right: 0.5rem;
+    }
+
+    /* Product Name, Description, and Other Text Inputs */
+    textarea.form-control {
+        height: 100px;
+        resize: vertical;
+    }
+
+    /* Submit and Back Buttons */
+    .btn-gradient-primary {
+        background: linear-gradient(45deg, #1e90ff, #00d4ff);
+        border: none;
+    }
+
+        .btn-gradient-primary:hover {
+            background: linear-gradient(45deg, #00d4ff, #1e90ff);
+        }
+
+    /* Additional Spacing */
+    .mt-4 {
+        margin-top: 1.5rem !important;
+    }
+
+    .mb-4 {
+        margin-bottom: 1.5rem !important;
+    }
+
+    .ms-2 {
+        margin-left: 0.5rem !important;
+    }
+
+    .ms-3 {
+        margin-left: 1rem !important;
+    }
+    /* Ensure all images have the same size */
+    .product-image {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 0.375rem;
+    }
+
+    /* Position the action buttons on top of the image */
+    .position-relative .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Dark transparent overlay */
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        border-radius: 0.375rem;
+    }
+
+    .position-relative:hover .overlay {
+        opacity: 1;
+    }
+
+    .overlay a {
+        color: #fff;
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        margin: 0.2rem;
+    }
+    /* Color Icon Styling */
+.color-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    display: inline-block;
+    position: relative;
+}
+
+/* Overlay Styling for Delete Button */
+.position-relative .color-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; 
+    opacity: 0;
+    transition: opacity 0.3s ease; 
+}
+
+.position-relative:hover .color-overlay {
+    opacity: 1;
+}
+
+.color-overlay a {
+    color: #fff;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+
+</style>
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title mb-4">Update Product</h4>
+            <form class="forms-sample" method="post" enctype="multipart/form-data">
+
+                <!-- Product Images -->
+                <div class="mb-4">
+                    @foreach (var item in Model.ProductImages)
+                    {
+                        <div class="position-relative d-inline-block mb-3">
+                            <img class="img-thumbnail product-image images" src="~/assets/img/@item.Image" style="width:150px; height:150px; border: @(item.IsMain ? "5" : "0")px solid red;" />
+                            <div class="overlay d-flex justify-content-center align-items-center">
+                                <a class="btn btn-danger mdi mdi-delete delete-img me-2" img-id="@item.Id" product-id="@Model.Id"></a>
+                                <a class="btn btn-primary mdi mdi-checkbox-marked main-img" img-id="@item.Id" product-id="@Model.Id"></a>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+
+                <!-- Product Colors -->
+              
+                <div class="mb-4">
+                    @foreach (var item in Model.Colors)
+                    {
+                        <div class="position-relative d-inline-block mb-2">
+                            <div class="color-icon" style="background-color:@item.ColorName;"></div>
+                            <div class="color-overlay d-flex justify-content-center align-items-center">
+                                <a style=" margin-right: 0;" class="btn btn-danger mdi mdi-delete delete-color" color-id="@item.Id"></a>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Tags -->
+                <div class="mb-3 form-group">
+                    <label asp-for="TagIds">Tags</label>
+                    <select class="form-control text-black" asp-for="TagIds" asp-items="@ViewBag.Tags" multiple></select>
+                    <span class="text-danger mt-2" asp-validation-for="TagIds"></span>
+                </div>
+
+                <!-- Colors -->
+                <div class="mb-3 form-group">
+                    <label asp-for="ColorIds">Colors</label>
+                    <select class="form-control text-black colors" asp-for="ColorIds" asp-items="@ViewBag.Colors" multiple></select>
+                    <span class="text-danger mt-2" asp-validation-for="ColorIds"></span>
+                </div>
+
+                <!-- Categories -->
+                <div class="mb-3 form-group">
+                    <label asp-for="CategoryId">Categories</label>
+                    <select class="form-control text-black" asp-for="CategoryId" asp-items="@ViewBag.Categories"></select>
+                    <span class="text-danger mt-2" asp-validation-for="CategoryId"></span>
+                </div>
+
+                <!-- Brands -->
+                <div class="mb-3 form-group">
+                    <label asp-for="BrandId">Brands</label>
+                    <select class="form-control text-black" asp-for="BrandId" asp-items="@ViewBag.Brands"></select>
+                    <span class="text-danger mt-2" asp-validation-for="BrandId"></span>
+                </div>
+
+                <!-- Images Upload -->
+                <div class="mb-3 form-group">
+                    <label asp-for="Images">Images</label>
+                    <input asp-for="Images" class="form-control">
+                    <span class="text-danger mt-2" asp-validation-for="Images"></span>
+                </div>
+
+                <!-- Product Name -->
+                <div class="mb-3 form-group">
+                    <label asp-for="Name">Name</label>
+                    <input asp-for="Name" type="text" class="form-control" placeholder="Enter product name">
+                    <span class="text-danger mt-2" asp-validation-for="Name"></span>
+                </div>
+
+                <!-- Product Description -->
+                <div class="mb-3 form-group">
+                    <label asp-for="Description">Description</label>
+                    <textarea asp-for="Description" class="form-control" placeholder="Enter product description"></textarea>
+                    <span class="text-danger mt-2" asp-validation-for="Description"></span>
+                </div>
+
+                <!-- Price -->
+                <div class="mb-3 form-group">
+                    <label asp-for="Price">Price</label>
+                    <input asp-for="Price" type="number"  class="form-control" placeholder="Enter product price">
+                    <span class="text-danger mt-2" asp-validation-for="Price"></span>
+                </div>
+
+                <!-- SKU -->
+                <div class="mb-3 form-group">
+                    <label asp-for="SKU">SKU</label>
+                    <input asp-for="SKU" type="text" class="form-control" placeholder="Enter SKU">
+                    <span class="text-danger mt-2" asp-validation-for="SKU"></span>
+                </div>
+
+                <!-- Weight -->
+                <div class="mb-3 form-group">
+                    <label asp-for="Weight">Weight</label>
+                    <input asp-for="Weight"    class="form-control" placeholder="Enter weight">
+                    <span class="text-danger mt-2" asp-validation-for="Weight"></span>
+                </div>
+
+                <!-- Rating -->
+                <div class="mb-3 form-group">
+                    <label asp-for="Rating">Rating</label>
+                    <input asp-for="Rating"    class="form-control" placeholder="Enter product rating">
+                    <span class="text-danger mt-2" asp-validation-for="Rating"></span>
+                </div>
+
+                <!-- Quantity -->
+                <div class="mb-3 form-group">
+                    <label asp-for="Quantity">Quantity</label>
+                    <input asp-for="Quantity" type="number"  class="form-control" placeholder="Enter available quantity">
+                    <span class="text-danger mt-2" asp-validation-for="Quantity"></span>
+                </div>
+
+                <!-- Submit and Back Buttons -->
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="submit" class="btn btn-gradient-success">Submit</button>
+                    <a class="btn btn-light" asp-area="Admin" asp-controller="Product" asp-action="Index">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

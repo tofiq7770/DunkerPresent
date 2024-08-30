@@ -1,0 +1,63 @@
+﻿@using Domain.Entities
+
+@model List<Blog>
+<style>
+    .smaller-card {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .smaller-img {
+      height: auto;
+      max-height: 542px;
+      object-fit: cover;
+    }
+
+    .bigger-title {
+      font-size: 2.5rem;
+    }
+
+    .bigger-text {
+      font-size: 1.2rem;
+    }
+
+    .btn-dark.bigger-text {
+      font-size: 1.1rem;
+      padding: 10px 20px;
+    }
+
+    .card-body a:hover {
+      color: #000000;
+    }   
+    .custom-button:hover {
+      color: white !important;
+    }
+    .btn-dark:hover {
+      background-color: #444;
+    }
+  </style> 
+  
+<main id="main" style="display: flex; flex-direction: column;  ">
+    <h1  style="font-size: 48px; font-weight: bold; margin-bottom: 50px; margin-top: 70px; text-align: center; width: 100%;">OUR BLOG PAGE</h1>
+
+    @foreach (var item in Model)
+    {
+        <div class="container my-4 mt-5">
+      <div class="card border-0   smaller-card">
+        <img src="~/assets/img/@item.Image" class="card-img-top smaller-img" alt="Ideas for Action">
+        <div class="card-body">
+          <div class="d-flex justify-content-between text-muted mb-2">
+            <a href="#" class="text-decoration-none bigger-text">SPORT</a>
+            <a href="#" class="text-decoration-none bigger-text">@item.CreatedTime.ToString("yyyy-MM-dd")</a>
+          </div>
+          <h1 style="font-size: 50px; font-weight: 640;" class="card-title bigger-title">@item.Title</h1>
+          <p class="card-text mt-2 bigger-text">
+           @item.Description
+          </p> 
+          <a asp-action="Index" asp-controller="Shop" class="mt-5 custom-button ">To Shop</a> 
+        </div>
+
+      </div>
+    </div> 
+    }
+  </main>

@@ -1,0 +1,393 @@
+﻿@using Service.ViewModels.Basket
+@model List<BasketListVM>
+@{
+      decimal totalPrice = 0;
+}
+
+<style>
+    .counter-container {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ccc;
+        padding: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        min-width: 120px; /* Ensure consistent width */
+        justify-content: center;
+    }
+
+    .plus-btn {
+        font-size: 15px;
+        padding: 10px;
+        margin: 0 15px;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+    }
+
+        .plus-btn:hover {
+            color: rgb(34, 34, 34);
+        }
+
+    #value {
+        font-size: 20px;
+        font-weight: 500;
+        width: 40px; /* Set a fixed width */
+        text-align: center;
+    }
+
+    .wishlist-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .left-side-wishlist {
+        display: flex;
+        align-items: center;
+        width: 60%; /* Adjust width as necessary */
+    }
+
+    .wishlist-img img {
+        width: 80px; /* Fixed width for images */
+        height: auto;
+    }
+
+    .wishlist-info a {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .right-side-wishlist {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .product-price {
+        width: 100px; /* Fixed width for price */
+        text-align: right;
+    }
+
+    .cart-totals {
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 400px;
+        margin-left: auto;
+    }
+
+        .cart-totals h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .cart-totals .totals-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+            .cart-totals .totals-item:last-child {
+                border-bottom: none;
+            }
+
+            .cart-totals .totals-item strong {
+                font-weight: bold;
+            }
+
+            .cart-totals .totals-item .label {
+                text-transform: uppercase;
+                font-size: 12px;
+            }
+
+            .cart-totals .totals-item .value {
+                font-size: 16px;
+            }
+
+        .cart-totals .shipping-options {
+            margin-top: 20px;
+        }
+
+            .cart-totals .shipping-options label {
+                display: block;
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+
+        .cart-totals .btn-checkout {
+            display: block;
+            width: 100%;
+            margin-top: 30px;
+            padding: 10px;
+            border: 2px solid black;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: bold;
+            background-color: transparent;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .cart-totals .btn-checkout:hover {
+                background-color: #f0f0f0;
+            }
+
+    .counter-container {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ccc;
+        padding: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        min-width: 120px; /* Ensure consistent width */
+        justify-content: center;
+    }
+
+    .plus-btn {
+        font-size: 15px;
+        padding: 10px;
+        margin: 0 15px;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+    }
+
+        .plus-btn:hover {
+            color: rgb(34, 34, 34);
+        }
+
+    #value {
+        font-size: 20px;
+        font-weight: 500;
+        width: 40px; /* Set a fixed width */
+        text-align: center;
+    }
+
+    .wishlist-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .left-side-wishlist {
+        display: flex;
+        align-items: center;
+        width: 60%; /* Adjust width as necessary */
+    }
+
+    .wishlist-img img {
+        width: 80px; /* Fixed width for images */
+        height: auto;
+    }
+
+    .wishlist-info a {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .right-side-wishlist {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .product-price {
+        width: 100px; /* Fixed width for price */
+        text-align: right;
+    }
+
+    .cart-totals {
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 400px;
+        margin-left: auto;
+    }
+
+        .cart-totals h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .cart-totals .totals-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+            .cart-totals .totals-item:last-child {
+                border-bottom: none;
+            }
+
+            .cart-totals .totals-item strong {
+                font-weight: bold;
+            }
+
+            .cart-totals .totals-item .label {
+                text-transform: uppercase;
+                font-size: 12px;
+            }
+
+            .cart-totals .totals-item .value {
+                font-size: 16px;
+            }
+
+        .cart-totals .shipping-options {
+            margin-top: 20px;
+        }
+
+            .cart-totals .shipping-options label {
+                display: block;
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+
+        .cart-totals .btn-checkout {
+            display: block;
+            width: 100%;
+            margin-top: 30px;
+            padding: 10px;
+            border: 2px solid black;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: bold;
+            background-color: transparent;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .cart-totals .btn-checkout:hover {
+                background-color: #f0f0f0;
+            }
+
+    .wishlist-header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        text-transform: uppercase;
+        padding: 15px 20px;
+        background-color: #f7f7f7;
+        border-bottom: 2px solid #ddd;
+        border-radius: 10px 10px 0 0;
+    }
+</style>
+<!-- Main Start -->
+<main id="main">
+    <!-- Breadcrumb Navigation Start -->
+    <nav id="breadcrumb">
+        <span><a href="./index.html">HOME</a></span>
+        <span class="line">|</span>
+        <span><a href="#" class="text-dark">CART</a></span>
+    </nav>
+    <!-- Breadcrumb Navigation End -->
+    <!-- Wishlist Section Start -->
+    <section id="wishlist">
+        <div class="product-wishlist">
+            <h2>Product Cart</h2>
+        </div>
+
+        <div class="wishlist-items" id="wishlist-container">
+
+            @if (Model.Count != 0)
+            {
+                @foreach (var item in Model)
+                {
+                    <div class=" wishlist-item">
+                        <div class="left-side-wishlist">
+                            <button class="delete-btn" data-id="@item.Id">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+
+                            <div class="wishlist-img">
+                                <img src="~/assets/img/@item.Image"
+                             alt="Product" />
+                            </div>
+                            <div class="wishlist-info">
+                                <a href="#">@item.Name</a>
+                                <a href="#"><span>@item.Name</span></a>
+                            </div>
+                        </div>
+                        <div class="right-side-wishlist">
+                            <div class="product-price">
+                                <span>$@item.Price</span>
+                            </div>
+                            <div class="counter-container">
+                                <button class="plus-btn minus-btn" id="decrement" data-id="@item.Id">
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
+
+                                <span id="value">@item.Quantity</span>
+
+                                <button class="plus-btn increment-button" data-id="@item.Id">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+
+                            <div class="right-side-wishlist">
+                                <div class="mx-5 product-price total-price">
+                                    <span>$@item.TotalPrice</span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                                totalPrice += item.Price * item.Quantity;
+                }
+                <div class="container my-5">
+                    <div class="cart-totals">
+                        <h2>Cart Totals</h2>
+
+                        <!-- Subtotal -->
+                    <div class="totals-item">
+                            <span class="label">Subtotal</span>
+                            <span class="value">$@totalPrice</span>
+                        </div>
+
+                        <!-- Subtotal -->
+                    <div class="totals-item">
+                            <span class="label">Discount</span>
+                            <span class="value">$0</span>
+                        </div>
+
+                        <!-- Total -->
+                    <div class="totals-item">
+                            <span class="label">Total</span>
+                            <span class="value"><strong>$@totalPrice</strong></span>
+                        </div>
+                        <button class="btn-checkout">Proceed to Checkout</button>
+                    </div>
+                </div>
+                 
+            }
+            else
+            {
+
+                <div class="wishlist-title text-center py-4 border border-top-1 border-bottom-1">
+                    <p class="m-0 fw-bold">NO PRODUCTS ADDED TO THE CART</p>
+                </div>
+
+            }
+              <div id="no-products-message" class="wishlist-title text-center py-4 border border-top-1 border-bottom-1" style="display: none;">
+                <p class="m-0 fw-bold">NO PRODUCTS ADDED TO THE CART</p>
+            </div>
+
+
+        </div>
+    </section>
+    <!-- Wishlist Section End -->
+</main>
+<!-- Main End -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/assets/js/basket.js"></script>

@@ -1,0 +1,88 @@
+﻿@using Domain.Entities
+@using Service.ViewModels.Product
+
+@model Product
+
+<style>
+    /* Main Product Image */
+    .main-product-image {
+        width: 250px;
+        border: 5px solid #007bff; /* Highlight the main image */
+        border-radius: 0.375rem;
+    }
+
+    /* Product Image Gallery */
+    .product-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        margin: 0.5rem;
+        border-radius: 0.375rem;
+    }
+
+    .highlight-image {
+        border: 3px solid #007bff; /* Extra highlight for the main image in the gallery */
+    }
+
+    /* Text Styling */
+    h4 {
+        font-weight: 600;
+    }
+
+    .text-secondary {
+        color: #6c757d;
+    }
+
+    /* Buttons */
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+
+</style>
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <!-- Main Image -->
+            <div class="text-center mb-4">
+                <img class="img-thumbnail main-product-image" src="~/assets/img/@Model.ProductImages.FirstOrDefault(m => m.IsMain).Image" alt="Main Image" />
+            </div>
+
+            <!-- Product Images Gallery -->
+            <div class="d-flex justify-content-center flex-wrap mb-4">
+                @foreach (var image in Model.ProductImages)
+                {
+                    <img class="img-thumbnail product-image @(image.IsMain ? "highlight-image" : "")" src="~/assets/img/@image.Image" alt="Product Image" />
+                }
+            </div>
+
+            <!-- Product Details -->
+            <h4 class="mb-3">Name: <span class="text-secondary">@Model.Name</span></h4>
+            <h4 class="mb-3">Description: <span class="text-secondary">@Model.Description</span></h4>
+            <h4 class="mb-3">Category: <span class="text-secondary">@Model.Category.Name</span></h4>
+            <h4 class="mb-3">Weight: <span class="text-secondary">@Model.Weight Kg</span></h4>
+            <h4 class="mb-3">SKU: <span class="text-secondary">@Model.SKU</span></h4> 
+            <h4 class="mb-3">Quantity: <span class="text-secondary">@Model.Quantity</span></h4>
+
+            <!-- Colors -->
+            <h4 class="mb-3">
+                Colors:
+                <span class="text-secondary">@string.Join(", ", Model.ProductColors.Select(m => m.Color.Name))</span>
+               
+            </h4>
+
+            <!-- Tags -->
+            <h4 class="mb-3">Tags: <span class="text-secondary">@string.Join(", ", Model.ProductTags.Select(m => m.Tag.Name))</span></h4>
+            <h4 class="mb-3">Price: <span class="text-secondary">$@Model.Price</span></h4>
+
+            <!-- Action Buttons -->
+            <div class="mt-4 d-flex justify-content-between">
+                <a class="btn btn-secondary" asp-area="Admin" asp-controller="Product" asp-action="Index">Back</a>
+                <a class="btn btn-primary" asp-area="Admin" asp-controller="Product" asp-route-id="@Model.Id" asp-action="Update">Update</a>
+                <a class="btn btn-danger" asp-area="Admin" asp-controller="Product" asp-route-id="@Model.Id" asp-action="Delete">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+﻿@using Service.ViewModels.Elementor
+  
+@model ElementorDetailVM
+  
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            
+    <h3><img style="width:200px;height:auto"  src="~/assets/img/@Model.Image" /></h3> 
+    
+    <div class=mt-4>
+
+        <a class="btn btn-primary" asp-area="Admin" asp-controller="Elementor" asp-action="Index">Back</a>
+        <a class="btn btn-primary" asp-area="Admin" asp-controller="Elementor" asp-route-id="@Model.Id" asp-action="Update">Update</a>
+        <a class="btn btn-danger" asp-area="Admin" asp-controller="Elementor" asp-route-id="@Model.Id" asp-action="Delete">Delete</a>
+    </div>
+</div>
+</div>

@@ -1,0 +1,156 @@
+﻿@using Domain.Entities
+@using Service.ViewModels.Brand
+@using Service.ViewModels.Category
+@using Service.ViewModels.Product
+@using Service.ViewModels.Tag
+
+@model ProductCreateVM
+
+<style>
+    /* General form styling */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: #333;
+    }
+
+    .form-select {
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        border: 1px solid #ced4da;
+        font-size: 1rem;
+        color: #495057;
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+        .form-select:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+    /* Validation error styling */
+    .text-danger {
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    /* Additional custom styles */
+    .form-group label::after {
+        content: " *";
+        color: #e74c3c;
+        font-weight: normal;
+    }
+
+    .form-select:hover {
+        border-color: #007bff;
+    }
+
+    .form-select option {
+        padding: 0.5rem;
+    }
+
+</style>
+
+<div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Create Product</h4>
+            <form class="forms-sample" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label asp-for="Name">Name</label>
+                    <input asp-for="Name" type="text" class="form-control" placeholder="Name">
+                    <span class="text-danger mt-2" asp-validation-for="Name"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description">Description</label>
+                    <input asp-for="Description" type="text" class="form-control" placeholder="Description">
+                    <span class="text-danger mt-2" asp-validation-for="Description"></span>
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="Price"></label>
+                    <input asp-for="Price" type="number"  class="form-control" placeholder="Price">
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="Rating"></label>
+                    <input asp-for="Rating" type="number"  class="form-control" placeholder="Rating">
+                    <span asp-validation-for="Rating" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="SKU"></label>
+                    <input asp-for="SKU"    class="form-control" placeholder="SKU">
+                    <span asp-validation-for="SKU" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group">
+                    <label asp-for="Weight"></label>
+                    <input asp-for="Weight"   class="form-control" placeholder="Weight">
+                    <span asp-validation-for="Weight" class="text-danger"></span>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label asp-for="Quantity"></label>
+                    <input asp-for="Quantity" type="number"  class="form-control" placeholder="Quantity">
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group mb-3">
+                    <label for="CategoryId" class="form-label">Category</label>
+                    <select asp-for="CategoryId" asp-items="@ViewBag.Categories" class="form-select">
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="BrandId" class="form-label">Brand</label>
+                    <select asp-for="BrandId" asp-items="@ViewBag.Brands" class="form-select">
+                    </select>
+                    <span asp-validation-for="BrandId" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="ColorIds" class="form-label">Color</label>
+                    <select asp-for="ColorIds" asp-items="@ViewBag.Colors" class="form-select" multiple>
+                    </select>
+                    <span asp-validation-for="ColorIds" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="TagIds" class="form-label">Tag</label>
+                    <select asp-for="TagIds" asp-items="@ViewBag.Tags" class="form-select" multiple>
+                    </select>
+                    <span asp-validation-for="TagIds" class="text-danger"></span>
+                </div>
+
+
+
+
+                <div class="form-group">
+                    <label asp-for="Images"></label>
+                    <input asp-for="Images" class="form-control" placeholder="Images">
+                    <span asp-validation-for="Images" class="text-danger"></span>
+                </div>
+
+
+
+                <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
+                <a class="btn btn-light" asp-area="Admin" asp-controller="Product" asp-action="Index">Back</a>
+
+            </form>
+        </div>
+    </div>
+</div>

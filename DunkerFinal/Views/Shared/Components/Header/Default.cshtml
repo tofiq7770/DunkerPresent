@@ -1,0 +1,259 @@
+﻿@using DunkerFinal.ViewModels.Header
+@using Service.ViewModels.Setting
+@model HeaderVM
+
+<!-- Header Section Start -->
+<header id="header">
+    <div class="discount-message d-lg-block d-none">
+        <a href="#" class="message">
+            10% DISCOUNT FOR REGISTERED USERS & FREE SHIPPING FOR ORDERS OVER $70
+            PLUS FREE RETURNS
+        </a>
+        <button class="close-btn">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
+    <!-- Navbar Start -->
+    <nav id="nav" class="d-lg-block d-none position-relative">
+        <div class="navbar-container">
+            <div class="leftside-nav">
+                <a asp-action="Index" asp-controller="Home">
+                    <div class="logo">
+                        <img src=" https://dunker.qodeinteractive.com/wp-content/uploads/2023/02/Dunker-logo-dark.png"
+                             alt="Dark Dunker" />
+                    </div>
+                </a>
+            </div>
+            <div class="middle-nav">
+                 <ul class="navbar-items">
+                        <li class="navbar-item active">
+                            <a asp-action="Index" asp-controller="Home" class="navbar-link">HOME</a>
+                        </li>
+                        <li class="navbar-item">
+                            <a asp-action="Index" asp-controller="Shop" class="navbar-link">SHOP</a>
+                            
+                        </li>
+                        <li class="navbar-item">
+                            <a asp-action="index" asp-controller="Contact" class="navbar-link">CONTACT US</a>
+                          
+                        </li>
+                        <li class="navbar-item">
+                            <a asp-action="Index" asp-controller="Blog" class="navbar-link">BLOG</a>
+                        </li> 
+                        <li class="navbar-item">
+                            <a asp-action="Index" asp-controller="Team" class="navbar-link">TEAM</a>
+                        </li> 
+                    </ul>
+            </div>
+            <div class="rightside-nav">
+                <div class="action-icons">
+                   <span style="cursor: pointer"
+                              class="search"
+                              onclick="openSearch()">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+
+                        <div id="searchOverlay" class="overlay">
+                            <span class="closebtn" onclick="closeSearch()">
+                                <i class="fa-solid fa-xmark"></i>
+                            </span>
+                            <div class="overlay-content">
+                                <h1>What are you looking for?</h1>
+
+                                <!-- Form for search functionality -->
+                                <form action="@Url.Action("Search", "Shop")" method="get">
+                                    <input id="searchInput" type="text" name="searchText" placeholder="Search..." required />
+                                    <button style="padding: 15px;font-size: 17px;border: none;background: #000000;color: rgb(255, 255, 255);cursor: pointer;" type="submit">Search</button>
+                                </form>
+                            </div>
+                        </div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="account-container">
+                            <span style="cursor: pointer" class="account">
+                                <i class="fa-regular fa-user"></i>
+                            </span>
+                            <div class="account-dropdown">
+                                <p class="name">Welcome To Dunker</p>
+                                <p class="position">@User.Identity.Name</p>
+
+                                @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
+                                {
+
+                                    <a asp-action="Index" asp-area="Admin" asp-controller="Home" class="btn">Dashboard</a>
+                                }
+                                <a asp-action="Logout" asp-controller="Account" class="btn">Logout</a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="account-container">
+                            <span style="cursor: pointer" class="account">
+                                <i class="fa-regular fa-user"></i>
+                            </span>
+                            <div class="account-dropdown">
+                                <p class="name">@User.Identity.Name</p>
+
+                                <p class="name">Welcome To Dunker</p>
+                                <a asp-action="Login" asp-controller="Account" class="btn">Login</a>
+                            </div>
+                        </div>
+                    }
+
+                    <a asp-action="Index" asp-controller="Wishlist">
+                        <span class="wish"><i class="fa-regular fa-heart"></i></span>
+                    </a>
+                </div>
+                <div class="basket basket-btn">
+                    <span class="basket-icon d-flex justify-content-center align-items-center gap-1">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                        <span class="count-basket">@Model.BasketCount</span>
+                    </span>
+                    <div class="basket-container"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Navbar End -->
+    <!-- Mobile Nav Start-->
+    <div class="mobile-header d-block d-lg-none">
+        <div class="mobile-header-top">
+            <div class="mobile-nav-container">
+                <div class="mobile-nav-left">
+                    <a href="./index.html">
+                        <div class="dark-logo">
+                            <img src="https://dunker.qodeinteractive.com/wp-content/uploads/2023/01/Mobile-logo.png"
+                                 alt="DunkerDark" />
+                        </div>
+                    </a>
+                </div>
+                <div class="mobile-nav-right">
+                    <div class="mobile-nav-actions">
+                        <div class="search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                        <div class="mobile-nav-basket">
+                            <a href="#"
+                               class="basket-btn basket-icon d-flex justify-content-center align-items-center gap-1">
+                                <i class="fa-solid fa-basket-shopping"></i>
+                                <span class="count-basket">0</span>
+                            </a>
+                            <div class="basket-container"></div>
+                        </div>
+                        <div class="menu-btn">
+                            <div class="menu-btn__burger"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav id="mobile-nav" class="mobile-navbar">
+            <ul class="mobile-navbar-items">
+                <li class="mobile-navbar-item text-uppercase">
+                    <a href="#" class="mobile-navbar-link">
+                        Home
+                        <span class="right-chevron">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </span>
+                    </a>
+                </li>
+                <li class="mobile-navbar-item text-uppercase">
+                    <a href="#" class="mobile-navbar-link">
+                        Shop
+                        <span class="right-chevron">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </span>
+                    </a>
+                    <ul class="mobile-subMenu-items">
+                        <li class="mobile-subMenu-item text-uppercase">
+                            <a href="#" id="sup" class="mobile-subMenu-link">
+                                Product Types
+                            </a>
+                        </li>
+                        <li class="mobile-subMenu-item text-uppercase">
+                            <a href="#" class="mobile-subMenu-link">Contact Us</a>
+                        </li>
+                        <li class="mobile-subMenu-item text-uppercase">
+                            <a href="#" class="mobile-subMenu-link">Terms & Conditions</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="mobile-navbar-item text-uppercase">
+                    <a href="#" class="mobile-navbar-link">
+                        Our Team
+                        <span class="right-chevron">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </span>
+                    </a>
+                    <ul class="mobile-subMenu-items">
+                        <li class="mobile-subMenu-item">
+                            <a href="#" class="mobile-subMenu-link">Contact Us</a>
+                        </li>
+                        <li class="mobile-subMenu-item text-uppercase">
+                            <a href="#" class="mobile-subMenu-link">Our Brands</a>
+                        </li>
+                        <li class="mobile-subMenu-item text-uppercase">
+                            <a href="#" class="mobile-subMenu-link">Terms & Conditions</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="mobile-navbar-item text-uppercase">
+                    <a href="#" class="mobile-navbar-link">
+                        Blog
+                        <span class="right-chevron">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </span>
+                    </a>
+                </li>
+                <li class="mobile-navbar-item text-uppercase">
+                    <a href="#" class="mobile-navbar-link">
+                        Faq
+                        <span class="right-chevron">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <!-- Mobile Nav End-->
+    <!-- Basket Sidebar -->
+    <div class="basket-sidebar">
+        <div class="basket-sidebar-content">
+            <div class="basket-sidebar-header">
+                <h4>Shopping Cart</h4>
+                <a href="#" class="button-close mb-2">
+                    <i class="fa-solid fa-x"></i>
+                </a>
+            </div>
+            <div class="basket-products"> 
+                    @foreach (var item in Model.Baskets)
+                    {
+                        <div class="basket-product">
+                            <a class="basket-img" asp-action="ProductDetail" asp-controller="Shop" asp-route-id="@item.ProductId">
+                                <img src="~/assets/img/@item.Product.ProductImages.FirstOrDefault(m=>m.IsMain).Image"
+                                 alt="Product" />
+                            </a>
+                            <div class="basket-product-content">
+                                <a href="#" class="product-category">@item.Product.Category.Name</a>
+                                <a href="#" class="product-item">@item.Product.Name</a>
+                                <span class="product-cost">$@item.Product.Price</span>
+                            </div>
+                            <a href="#" class="remove-basket">
+                                <i class="fa-solid fa-x"></i>
+                            </a>
+                        </div>
+                    } 
+            </div>
+            <div class="basket-total">
+                <span>Subtotal:</span>
+                <span class="amount">@Model.BasketCount</span>
+            </div>
+            <div class="basket-buttons">
+                <a asp-action="Index" asp-controller="Basket" class="custom-button">View Cart & Checkout</a>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Header Section End -->

@@ -1,0 +1,62 @@
+﻿@using Domain.Entities
+
+@model List<Team>
+
+
+<section style="text-align: center; padding: 80px 0;">
+    <h1 style="font-size: 48px; font-weight: bold; margin-bottom: 50px;">MEET OUR TEAM</h1>
+    <div class="mt-5 container">
+        <div class="mt-5 row">
+            @if (Model.Count > 0)
+            {
+                @foreach (var item in Model)
+                {
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div style="background-color: #fff; border: 1px solid #ddd; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  overflow: hidden; transition: transform 0.3s;"
+                     onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                            <img src="~/assets/img/@item.Image"
+                         alt="William Smith" style="width: 100%; height: auto;">
+                            <div style="padding: 20px;">
+                                <p style="font-size: 14px; color: #888; margin-bottom: 10px;">@item.Position</p>
+                                <p style="font-size: 22px; font-weight: bold; color: #000;">@item.Name</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                 <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="team-member">
+                        <img src="https://dunker.qodeinteractive.com/wp-content/uploads/2023/01/inner-team-4.jpg" alt="Emma Williams">
+                        <div class="member-info">
+                            <p class="role">Product Manager</p>
+                            <p class="name">EMMA WILLIAMS</p>
+                        </div>
+                    </div>
+                </div> <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="team-member">
+                        <img src="https://dunker.qodeinteractive.com/wp-content/uploads/2023/01/inner-team-4.jpg" alt="Emma Williams">
+                        <div class="member-info">
+                            <p class="role">Product Manager</p>
+                            <p class="name">EMMA WILLIAMS</p>
+                        </div>
+                    </div>
+                </div> <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="team-member">
+                        <img src="https://dunker.qodeinteractive.com/wp-content/uploads/2023/01/inner-team-4.jpg" alt="Emma Williams">
+                        <div class="member-info">
+                            <p class="role">Product Manager</p>
+                            <p class="name">EMMA WILLIAMS</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

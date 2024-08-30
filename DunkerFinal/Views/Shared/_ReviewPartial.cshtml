@@ -1,0 +1,27 @@
+﻿@model Review
+
+<div class="tab d-none" data-tab="additional-info">
+    <div class="product-stats">
+        <div class="container mt-5">
+            <div class="review" style="margin-bottom: 30px; padding: 20px; border: 1px solid #e2e2e2; border-radius: 8px; background-color: #f9f9f9;">
+                <div class="d-flex align-items-start">
+                    <img src="~/assets/img/User.png" alt="User Avatar" class="rounded-circle mr-3" style="width: 70px; height: 70px; object-fit: cover; margin-right: 20px;">
+                    <div>
+                        <p class="mb-1 text-muted" style="margin: 0; color: #777; font-size: 14px;">@Model.CreateDate.ToString("MMMM dd, yyyy")</p>
+                        <h5 class="font-weight-bold mb-1" style="margin: 5px 0; font-size: 18px; color: #333;">@Model.AppUser.FullName</h5>
+                        <p style="font-size: 16px; color: #555; margin-bottom: 10px;">
+                        @Model.Message
+                        </p>
+                        <div class="stars" style="font-size: 18px;">
+                            <span class="text-warning" style="color: #ffc107;">&#9733;</span>
+                            <span class="text-warning" style="color: #ffc107;">&#9733;</span>
+                            <span class="text-warning" style="color: #ffc107;">&#9733;</span>
+                            <span class="text-warning" style="color: #ffc107;">&#9733;</span>
+                            <span class="text-secondary" style="color: #e2e2e2;">&#9733;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

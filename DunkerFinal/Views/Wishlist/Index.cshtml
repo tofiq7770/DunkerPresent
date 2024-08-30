@@ -1,0 +1,227 @@
+﻿@using Service.ViewModels.Wishlist
+@model List<WishlistListVM>
+<!-- Main Start -->
+
+<style>
+
+.add-to-basket-button {
+    font-size: 14px !important;
+    padding: 20px 70px !important;
+    background: transparent !important;
+    border: 2px solid #000 !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: background-color 0.4s ease-in !important, color 0.4s ease-in !important;
+    position: unset !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important; /* Ensure text does not wrap */
+}
+
+.add-to-basket-button {
+    width: 55px !important;
+    height: 55px !important;
+    background-color: white !important;
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+.add-to-basket-button span {
+    margin-right: 8px !important; /* Adjust spacing between text and icon */
+    display: inline-block !important; /* Ensure the span acts as an inline element */
+    white-space: nowrap !important; /* Prevent line breaks within the span */
+}
+
+.add-to-basket-button:hover {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+
+
+</style>
+
+<input name="__RequestVerificationToken" type="hidden" value="...">
+<main id="main">
+
+    <!-- Breadcrumb Navigation Start -->
+    <nav id="breadcrumb">
+        <span><a href="./index.html">HOME</a></span>
+        <span class="line">|</span>
+        <span><a href="#" class="text-dark">WISHLIST</a></span>
+    </nav>
+    <!-- Breadcrumb Navigation End -->
+    <!-- Wishlist Section Start -->
+    <section id="wishlist">
+        <div class="product-wishlist">
+            <h2>Product Wishlist</h2>
+        </div>
+
+        <div class="wishlist-items" id="wishlist-container">
+
+
+
+            @if (Model.Count != 0)
+            {
+                @foreach (var item in Model)
+                {
+                    <div class="wishlist-item">
+                        <div class="left-side-wishlist">
+                            @Html.AntiForgeryToken()
+
+                            <button class="remove-from-wishlist-button" data-product-id="@item.Id">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+
+
+
+                            <div class="wishlist-img">
+                                <img src="~/assets/img/@item.Image"
+                             alt="Product" />
+                            </div>
+                            <div class="wishlist-info">
+                                <a href="#">@item.Name</a>
+                                <a href="#"><span>@item.Name</span></a>
+                            </div>
+                        </div>
+                        <div class="right-side-wishlist">
+                            <div class="product-price">
+                                <span>$@item.Price</span>
+                            </div>
+                            <div class="product-stock-status">
+                                <span>In Stock</span>
+                            </div>
+
+                                <button class="add-to-basket-button" data-product-id="@item.ProductId">
+                                    <span>ADD TO CART</span> <i class="fa-solid fa-basket-shopping"></i>
+                                </button>
+
+                            @* <a class="custom-button" data-product-id="@item.ProductId">
+                                ADD TO CART
+                                <i class="fa-solid fa-basket-shopping"></i>
+                                </a>*@
+
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="wishlist-title text-center py-4 border border-top-1 border-bottom-1">
+                    <p class="m-0 fw-bold">NO PRODUCTS ADDED TO THE WISHLIST</p>
+                </div>
+            }
+            <div id="wishlist-empty-message" class="wishlist-title text-center py-4 border border-top-1 border-bottom-1" style="display: none;">
+                <p class="m-0 fw-bold">NO PRODUCTS ADDED TO THE WISHLIST</p>
+            </div>
+
+
+        </div>
+    </section>
+    <!-- Wishlist Section End -->
+</main>
+<!-- Main End -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Function to check and update the empty message display
+        function updateWishlistEmptyMessage(basketCount) {
+            const emptyMessage = document.getElementById('wishlist-empty-message');
+            if (basketCount === 0) {
+                emptyMessage.style.display = 'block';
+            } else {
+                emptyMessage.style.display = 'none';
+            }
+        }
+
+        document.querySelectorAll('.remove-from-wishlist-button').forEach(button => {
+            button.addEventListener('click', async function() {
+                const productId = this.getAttribute('data-product-id');
+
+                if (!productId) {
+                    console.error('Product ID is missing from button data attributes.');
+                    Swal.fire(
+                        'Error!',
+                        'Product ID is missing.',
+                        'error'
+                    );
+                    return;
+                }
+
+                const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
+
+                if (!tokenElement) {
+                    Swal.fire(
+                        'Error!',
+                        'CSRF token not found.',
+                        'error'
+                    );
+                    return;
+                }
+
+                const result = await Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                });
+
+                if (result.isConfirmed) {
+                    try {
+                        const response = await fetch('/Wishlist/delete', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'RequestVerificationToken': tokenElement.value
+                            },
+                            body: JSON.stringify({ id: productId })
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok.');
+                        }
+
+                        const data = await response.json();
+
+                        if (data.success) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Your product has been deleted.',
+                                'success'
+                            );
+
+                            // Update UI accordingly
+                            this.closest('.wishlist-item').remove();
+
+                            // Check and update the empty message display
+                            updateWishlistEmptyMessage(data.basketCount);
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                data.message,
+                                'error'
+                            );
+                        }
+                    } catch (error) {
+                        Swal.fire(
+                            'Error!',
+                            'An unexpected error occurred: ' + error.message,
+                            'error'
+                        );
+                    }
+                }
+            });
+        });
+
+        // Initial check to see if wishlist is empty on page load
+        fetch('/Wishlist/get-basket-count') // Replace with your endpoint to get basket count
+            .then(response => response.json())
+            .then(data => updateWishlistEmptyMessage(data.basketCount))
+            .catch(error => console.error('Error fetching basket count:', error));
+    });
+
+     
+</script>
