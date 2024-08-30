@@ -10,15 +10,13 @@
                         <p class="mb-1 text-muted" style="margin: 0; color: #777; font-size: 14px;">@Model.CreateDate.ToString("MMMM dd, yyyy")</p>
                         <h5 class="font-weight-bold mb-1" style="margin: 5px 0; font-size: 18px; color: #333;">@Model.AppUser.FullName</h5>
                         <p style="font-size: 16px; color: #555; margin-bottom: 10px;">
-                        @Model.Message
+                            @Model.Message
                         </p>
                         <div class="stars" style="font-size: 18px;">
-                            <span class="text-warning" style="color: #ffc107;">&#9733;</span>
-                            <span class="text-warning" style="color: #ffc107;">&#9733;</span>
-                            <span class="text-warning" style="color: #ffc107;">&#9733;</span>
-                            <span class="text-warning" style="color: #ffc107;">&#9733;</span>
-                            <span class="text-secondary" style="color: #e2e2e2;">&#9733;</span>
                         </div>
+                        <button class="delete-comment-btn btn btn-outline-danger btn-sm mt-2 float-right" data-comment-id="@Model.Id">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </button>
                     </div>
                 </div>
             </div>

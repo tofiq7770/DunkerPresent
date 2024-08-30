@@ -302,7 +302,41 @@ namespace DunkerFinal.Controllers
             return Json(new { success = true });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteComment(int commentId)
+        {
+            // Check if the user is authenticated
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Json(new { success = false, message = "You need to be logged in to delete a comment." });
+            }
 
+            // Retrieve the currently authenticated user's ID
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Find the comment
+            var comment = await _context.Reviews
+                                        .Include(r => r.AppUser)
+                                        .FirstOrDefaultAsync(r => r.Id == commentId);
+
+            if (comment == null)
+            {
+                return Json(new { success = false, message = "Comment not found." });
+            }
+
+            // Check if the user is the author of the comment
+            if (comment.AppUser.Id != userId)
+            {
+                return Json(new { success = false, message = "You are not authorized to delete this comment." });
+            }
+
+            // Remove the comment
+            _context.Reviews.Remove(comment);
+            await _context.SaveChangesAsync();
+
+            return Json(new { success = true, message = "Comment deleted successfully." });
+        }
 
     }
 }

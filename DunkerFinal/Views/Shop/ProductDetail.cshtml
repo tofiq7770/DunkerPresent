@@ -1,5 +1,6 @@
 ﻿@using Domain.Entities
 @using DunkerFinal.ViewModels.Shop
+@using System.Security.Claims
 
 @model ShopVM
 
@@ -20,6 +21,28 @@
         justify-content: center !important;
         white-space: nowrap !important; /* Ensure text does not wrap */
     }
+
+    .review {
+        margin-bottom: 30px;
+        padding: 20px;
+        border: 1px solid #e2e2e2;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        position: relative;
+    }
+
+    .delete-comment-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        border: none;
+        color: #d9534f;
+    }
+
+        .delete-comment-btn:hover {
+            color: #c9302c;
+            background-color: transparent;
+        }
 
     .add-to-basket-button {
         width: 55px !important;
@@ -163,20 +186,19 @@
                                             {
                                                 <div class="review" style="margin-bottom: 30px; padding: 20px; border: 1px solid #e2e2e2; border-radius: 8px; background-color: #f9f9f9;">
                                                     <div class="d-flex align-items-start">
-                                                        <img src="~/assets/img/User.png" alt="User Avatar" class="rounded-circle mr-3" style="width: 70px; height: 70px; object-fit: cover; margin-right: 20px;">
-                                                        <div>
+                                                        <img src="@Url.Content("~/assets/img/User.png")" alt="User Avatar" class="rounded-circle mr-3" style="width: 70px; height: 70px; object-fit: cover; margin-right: 20px;">
+                                                        <div class="flex-grow-1">
                                                             <p class="mb-1 text-muted" style="margin: 0; color: #777; font-size: 14px;">@item.CreatedTime.ToString("MMMM dd, yyyy")</p>
                                                             <h5 class="font-weight-bold mb-1" style="margin: 5px 0; font-size: 18px; color: #333;">@item.AppUser.FullName</h5>
-                                                            <p style="font-size: 16px; color: #555; margin-bottom: 10px;">
-                                                                @item.Message
-                                                            </p>
+                                                            <p style="font-size: 16px; color: #555; margin-bottom: 10px;">@item.Message</p>
                                                             <div class="stars" style="font-size: 18px;">
-                                                             @*      @for (int i = 1; i <= 5; i++)
-                                                                    {
-                                                                    <span class="text-warning" style="color: @(i <= item.Product.Rating ? "#ffc107" : "#e2e2e2");">&#9733;</span>
-                                                                    } *@
                                                             </div>
-
+                                                            @if (item.AppUser.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                                                            {
+                                                                <button class="delete-comment-btn btn btn-outline-danger btn-sm mt-2 float-right" data-comment-id="@item.Id">
+                                                                    <i class="fas fa-trash-alt"></i> Delete
+                                                                </button>
+                                                            }
                                                         </div>
                                                     </div>
                                                 </div>
@@ -186,6 +208,8 @@
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             </div>
@@ -212,16 +236,11 @@
                 <div class="form-group">
                     <label for="rating">Please rate:</label>
                     <div id="rating">
-                      @*  @for (int i = 1; i <= 5; i++)
-                        {
-                            <input type="radio" id="rating@i" name="rating" value="@i" required />
-                            <label for="rating@i" class="text-secondary" style="font-size: 18px;">&#9733;</label>
-                        }*@ 
                     </div>
                 </div>
                 <button type="submit" class="btn btn-outline-success">Post Comment</button>
             </form>
-             
+
 
 
 
@@ -244,7 +263,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
-             $('#reviewForm').on('submit', function(event) {
+            $('#reviewForm').on('submit', function(event) {
         event.preventDefault(); // Prevent the default form submission
 
         let formData = $(this).serialize(); // Serialize form data
@@ -256,10 +275,10 @@
             success: function(response) {
                 if (response.success) {
                     let reviewHtml = `
-                        <div class="review" style="margin-bottom: 30px; padding: 20px; border: 1px solid #e2e2e2; border-radius: 8px; background-color: #f9f9f9;">
+                        <div class="review" style="margin-bottom: 30px; padding: 20px; border: 1px solid #e2e2e2; border-radius: 8px; background-color: #f9f9f9; position: relative;">
                             <div class="d-flex align-items-start">
-                                <img src="/assets/img/User.png" alt="User Avatar" class="rounded-circle mr-3" style="width: 70px; height: 70px; object-fit: cover; margin-right: 20px;">
-                                <div>
+                                <img src="@Url.Content("~/assets/img/User.png")" alt="User Avatar" class="rounded-circle mr-3" style="width: 70px; height: 70px; object-fit: cover; margin-right: 20px;">
+                                <div class="flex-grow-1">
                                     <p class="mb-1 text-muted" style="margin: 0; color: #777; font-size: 14px;">${new Date().toLocaleDateString()}</p>
                                     <h5 class="font-weight-bold mb-1" style="margin: 5px 0; font-size: 18px; color: #333;">${$('#name').val()}</h5>
                                     <p style="font-size: 16px; color: #555; margin-bottom: 10px;">${$('#review').val()}</p>
@@ -267,6 +286,9 @@
                                         ${'<span class="text-warning" style="color: #ffc107;">&#9733;</span>'.repeat($('input[name="rating"]:checked').val())}
                                         ${'<span class="text-secondary">&#9733;</span>'.repeat(5 - $('input[name="rating"]:checked').val())}
                                     </div>
+                                    <button class="delete-comment-btn btn btn-outline-danger btn-sm mt-2 float-right" style="position: absolute; top: 10px; right: 10px;">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -291,6 +313,61 @@
 
 
 
+
 </script>
 
- 
+<script>
+     $(document).on('click', '.delete-comment-btn', function () {
+        const commentId = $(this).data('comment-id');
+        const deleteUrl = '@Url.Action("DeleteComment", "Shop")'; // Replace 'YourControllerName' with your actual controller name
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: deleteUrl,
+                    type: 'POST',
+                    data: { commentId: commentId },
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() // CSRF token
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire(
+                                'Deleted!',
+                                response.message,
+                                'success'
+                            );
+
+                            // Remove the comment from the DOM
+                            $(`button[data-comment-id="${commentId}"]`).closest('.review').remove();
+                            updateReviewCount();
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                response.message,
+                                'error'
+                            );
+                        }
+                    },
+                    error: function () {
+                        Swal.fire(
+                            'Error!',
+                            'An error occurred while trying to delete the comment.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    });
+
+</script>
+

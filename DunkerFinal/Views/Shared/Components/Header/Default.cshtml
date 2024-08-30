@@ -236,8 +236,8 @@
                                  alt="Product" />
                             </a>
                             <div class="basket-product-content">
-                                <a href="#" class="product-category">@item.Product.Category.Name</a>
-                                <a href="#" class="product-item">@item.Product.Name</a>
+                                <a asp-action="ProductDetail" asp-controller="Shop" asp-route-id="@item.Product.Id" class="product-category">@item.Product.Category.Name</a>
+                                <a asp-action="ProductDetail" asp-controller="Shop" asp-route-id="@item.Product.Id" class="product-item">@item.Product.Name</a>
                                 <span class="product-cost">$@item.Product.Price</span>
                             </div> 
                         </div>
