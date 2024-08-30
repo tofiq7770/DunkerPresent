@@ -1,6 +1,10 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Repository.DAL;
 using Service.ViewModels.Basket;
@@ -57,6 +61,87 @@ namespace DunkerFinal.Controllers
             return View(basketListVMs);
         }
 
+        //[HttpPost]
+        //public async Task<IActionResult> Add(int? productId)
+        //{
+        //    if (productId == null)
+        //        return BadRequest(new { success = false, message = "Product ID is required." });
+
+        //    if (!User.Identity.IsAuthenticated)
+        //    {
+        //        // Return a JSON response indicating that the user is not authenticated
+        //        return Json(new { success = false, message = "User is not authenticated.", redirectUrl = Url.Action("Login", "Account") });
+        //    }
+
+        //    AppUser existUser = await _userManager.FindByNameAsync(User.Identity.Name);
+        //    if (existUser == null)
+        //        return NotFound();
+
+        //    Product existProduct = await _context.Products.FirstOrDefaultAsync(m => m.Id == productId);
+        //    if (existProduct == null)
+        //        return NotFound();
+
+        //    BasketProduct basketProduct = await _context.BasketProducts
+        //        .FirstOrDefaultAsync(m => m.ProductId == productId && m.Basket.AppUserId == existUser.Id);
+        //    Basket basket = await _context.Baskets
+        //        .Include(m => m.BasketProducts)
+        //        .FirstOrDefaultAsync(m => m.AppUserId == existUser.Id);
+
+        //    if (basketProduct != null)
+        //    {
+        //        basketProduct.Quantity++;
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    else
+        //    {
+        //        if (basket != null)
+        //        {
+        //            basket.BasketProducts.Add(new BasketProduct()
+        //            {
+        //                ProductId = (int)productId,
+        //                Quantity = 1
+        //            });
+        //        }
+        //        else
+        //        {
+        //            Basket newBasket = new()
+        //            {
+        //                AppUserId = existUser.Id,
+        //            };
+
+        //            await _context.Baskets.AddAsync(newBasket);
+        //            await _context.SaveChangesAsync();
+
+        //            BasketProduct newBasketProduct = new()
+        //            {
+        //                BasketId = newBasket.Id,
+        //                ProductId = (int)productId,
+        //                Quantity = 1
+        //            };
+
+        //            await _context.BasketProducts.AddAsync(newBasketProduct);
+        //        }
+
+        //        await _context.SaveChangesAsync();
+
+        //        // This part renders the partial view for the updated basket
+        //        BasketProduct addedProduct = await _context.BasketProducts
+        //            .Include(m => m.Product).ThenInclude(m => m.ProductImages)
+        //            .Include(m => m.Product).ThenInclude(m => m.Category)
+        //            .FirstOrDefaultAsync(m => m.ProductId == productId && m.Basket.AppUserId == existUser.Id);
+
+        //        string renderedView = await RenderViewAsync("_SidebarBasket", addedProduct);
+
+        //        return Json(new { success = true, message = "Product added to basket.", uniqueProductCount = basket.BasketProducts.Count, partialView = renderedView });
+        //    }
+
+        //    int uniqueProductCount = await _context.BasketProducts
+        //        .Where(m => m.Basket.AppUserId == existUser.Id)
+        //        .CountAsync();
+
+        //    return Json(new { success = true, message = "Product added to basket.", uniqueProductCount });
+        //}
+
         [HttpPost]
         public async Task<IActionResult> Add(int? productId)
         {
@@ -70,18 +155,15 @@ namespace DunkerFinal.Controllers
             }
 
             AppUser existUser = await _userManager.FindByNameAsync(User.Identity.Name);
-
             if (existUser == null)
                 return NotFound();
 
             Product existProduct = await _context.Products.FirstOrDefaultAsync(m => m.Id == productId);
-
             if (existProduct == null)
                 return NotFound();
 
             BasketProduct basketProduct = await _context.BasketProducts
                 .FirstOrDefaultAsync(m => m.ProductId == productId && m.Basket.AppUserId == existUser.Id);
-
             Basket basket = await _context.Baskets
                 .Include(m => m.BasketProducts)
                 .FirstOrDefaultAsync(m => m.AppUserId == existUser.Id);
@@ -90,6 +172,9 @@ namespace DunkerFinal.Controllers
             {
                 basketProduct.Quantity++;
                 await _context.SaveChangesAsync();
+
+                // Send a response that only updates the product count
+                return Json(new { success = true, message = "Product quantity updated.", uniqueProductCount = basket.BasketProducts.Count, isUpdate = true });
             }
             else
             {
@@ -123,20 +208,114 @@ namespace DunkerFinal.Controllers
 
                 await _context.SaveChangesAsync();
 
-                BasketProduct addedProduct = _context.BasketProducts
+                // This part renders the partial view for the updated basket
+                BasketProduct addedProduct = await _context.BasketProducts
                     .Include(m => m.Product).ThenInclude(m => m.ProductImages)
                     .Include(m => m.Product).ThenInclude(m => m.Category)
-                    .FirstOrDefault(m => m.ProductId == productId);
+                    .FirstOrDefaultAsync(m => m.ProductId == productId && m.Basket.AppUserId == existUser.Id);
 
-                return PartialView("_SidebarBasket", addedProduct);
+                string renderedView = await RenderViewAsync("_SidebarBasket", addedProduct);
+
+                return Json(new { success = true, message = "Product added to basket.", uniqueProductCount = basket.BasketProducts.Count, partialView = renderedView, isUpdate = false });
             }
-
-            int uniqueProductCount = await _context.BasketProducts
-                .Where(m => m.Basket.AppUserId == existUser.Id)
-                .CountAsync();
-
-            return Json(new { success = true, message = "Product added to basket.", uniqueProductCount });
         }
+
+
+        private async Task<string> RenderViewAsync(string viewName, object model, bool partial = false)
+        {
+            var viewEngine = HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
+            var tempDataProvider = HttpContext.RequestServices.GetService(typeof(ITempDataProvider)) as ITempDataProvider;
+            var actionContext = new ActionContext(HttpContext, HttpContext.GetRouteData(), ControllerContext.ActionDescriptor, ModelState);
+
+            using (var sw = new StringWriter())
+            {
+                var viewResult = viewEngine.FindView(actionContext, viewName, !partial);
+                if (viewResult.View == null)
+                {
+                    throw new ArgumentNullException($"{viewName} does not match any available view");
+                }
+
+                var viewDictionary = new ViewDataDictionary(new EmptyModelMetadataProvider(), ModelState)
+                {
+                    Model = model
+                };
+                var viewContext = new ViewContext(actionContext, viewResult.View, viewDictionary, new TempDataDictionary(HttpContext, tempDataProvider), sw, new HtmlHelperOptions());
+
+                await viewResult.View.RenderAsync(viewContext);
+                return sw.ToString();
+            }
+        }
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> Add([FromBody] int? productId)
+        //{
+        //    if (productId == null)
+        //        return BadRequest(new { success = false, message = "Product ID is required." });
+
+        //    if (!User.Identity.IsAuthenticated)
+        //    {
+        //        return Json(new { success = false, message = "User is not authenticated.", redirectUrl = Url.Action("Login", "Account") });
+        //    }
+
+        //    AppUser existUser = await _userManager.FindByNameAsync(User.Identity.Name);
+        //    if (existUser == null)
+        //        return NotFound();
+
+        //    Product existProduct = await _context.Products.FirstOrDefaultAsync(m => m.Id == productId);
+        //    if (existProduct == null)
+        //        return NotFound();
+
+        //    BasketProduct basketProduct = await _context.BasketProducts
+        //        .FirstOrDefaultAsync(m => m.ProductId == productId && m.Basket.AppUserId == existUser.Id);
+        //    Basket basket = await _context.Baskets
+        //        .Include(m => m.BasketProducts)
+        //        .FirstOrDefaultAsync(m => m.AppUserId == existUser.Id);
+
+        //    if (basketProduct != null)
+        //    {
+        //        basketProduct.Quantity++;
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    else
+        //    {
+        //        if (basket != null)
+        //        {
+        //            basket.BasketProducts.Add(new BasketProduct()
+        //            {
+        //                ProductId = (int)productId,
+        //                Quantity = 1
+        //            });
+        //        }
+        //        else
+        //        {
+        //            Basket newBasket = new()
+        //            {
+        //                AppUserId = existUser.Id,
+        //            };
+
+        //            await _context.Baskets.AddAsync(newBasket);
+        //            await _context.SaveChangesAsync();
+
+        //            BasketProduct newBasketProduct = new()
+        //            {
+        //                BasketId = newBasket.Id,
+        //                ProductId = (int)productId,
+        //                Quantity = 1
+        //            };
+
+        //            await _context.BasketProducts.AddAsync(newBasketProduct);
+        //        }
+
+        //        await _context.SaveChangesAsync();
+        //    }
+
+        //    int uniqueProductCount = await _context.BasketProducts
+        //        .Where(m => m.Basket.AppUserId == existUser.Id)
+        //        .CountAsync();
+
+        //    return Json(new { success = true, message = "Product added to basket.", uniqueProductCount });
+        //}
 
         [HttpPost]
         public async Task<IActionResult> Delete(int? id)

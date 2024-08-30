@@ -175,21 +175,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
-
-
 document.querySelectorAll('.add-to-basket-button').forEach(button => {
     button.addEventListener('click', async function () {
         const productId = this.getAttribute('data-product-id');
 
         try {
-            const response = await fetch('/Basket/Add', {
+            const response = await fetch(`/Basket/Add?productId=${productId}`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: JSON.stringify(productId)
+                }
             });
 
             const result = await response.json();
@@ -201,10 +196,9 @@ document.querySelectorAll('.add-to-basket-button').forEach(button => {
                         text: 'You need to be logged in to add items to your basket.',
                         icon: 'warning',
                         showConfirmButton: true,
-                        confirmButtonText: 'Login',
-                        onClose: () => {
-                            window.location.href = result.redirectUrl;
-                        }
+                        confirmButtonText: 'Login'
+                    }).then(() => {
+                        window.location.href = result.redirectUrl;
                     });
                 } else {
                     Swal.fire({
@@ -215,9 +209,13 @@ document.querySelectorAll('.add-to-basket-button').forEach(button => {
                         showConfirmButton: false
                     });
 
+                    // Update basket count
                     document.querySelector('.count-basket').textContent = result.uniqueProductCount;
 
-                    updateBasketUI();
+                    if (!result.isUpdate) {
+                        // Only add new HTML for new products
+                        document.querySelector(".basket-products").innerHTML += result.partialView;
+                    }
                 }
             } else {
                 Swal.fire({
@@ -241,9 +239,11 @@ document.querySelectorAll('.add-to-basket-button').forEach(button => {
     });
 });
 
+
 function updateBasketUI() {
     // Implement this function to refresh the basket display, count items, etc.
 }
+
 
 
 const debounce = (func, delay) => {

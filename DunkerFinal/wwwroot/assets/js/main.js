@@ -80,52 +80,70 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-$(document).ready(function () {
+document.querySelectorAll('.add-to-basket-button').forEach(button => {
+    button.addEventListener('click', async function () {
+        const productId = this.getAttribute('data-product-id');
 
-    document.querySelectorAll('.add-to-basket-button').forEach(button => {
-        button.addEventListener('click', async function () {
-            const productId = this.getAttribute('data-product-id');
-
-            $.ajax({
-                type: "POST",
-                url: `/Basket/Add?productId=${productId}`,
-                contentType: "application/json; charset=utf-8",
-                success: function (result) {
-                    if (result.redirectUrl) {
-                        Swal.fire({
-                            title: 'Login Required',
-                            text: 'You need to be logged in to add items to your basket.',
-                            icon: 'warning',
-                            showConfirmButton: true,
-                            confirmButtonText: 'Login',
-                            onClose: () => {
-                                window.location.href = result.redirectUrl;
-                            }
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Success!',
-                            text: result.message,
-                            icon: 'success',
-                            timer: 1200,
-                        });
-
-                        document.querySelector(".basket-products").insertAdjacentHTML('beforeend', result);
-
-                        //document.querySelector('.count-basket').textContent = result.uniqueProductCount;
-
-                        $('.count-basket').html(result.uniqueProductCount);
-
-                        console.log(result);
-
-                        updateBasketUI();
-                    }
+        try {
+            const response = await fetch(`/Basket/Add?productId=${productId}`, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
             });
-        });
-    });
 
+            const result = await response.json();
+
+            if (response.ok) {
+                if (result.redirectUrl) {
+                    Swal.fire({
+                        title: 'Login Required',
+                        text: 'You need to be logged in to add items to your basket.',
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonText: 'Login'
+                    }).then(() => {
+                        window.location.href = result.redirectUrl;
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: result.message,
+                        icon: 'success',
+                        timer: 1200,
+                        showConfirmButton: false
+                    });
+
+                    // Update basket count
+                    document.querySelector('.count-basket').textContent = result.uniqueProductCount;
+
+                    if (!result.isUpdate) {
+                        // Only add new HTML for new products
+                        document.querySelector(".basket-products").innerHTML += result.partialView;
+                    }
+                }
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to add product to basket. ' + result.message,
+                    icon: 'error',
+                    timer: 1200,
+                    showConfirmButton: false
+                });
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+            Swal.fire({
+                title: 'Network Error!',
+                text: 'An error occurred. Please try again.',
+                icon: 'error',
+                timer: 1200,
+                showConfirmButton: false
+            });
+        }
+    });
 });
+
 
 //document.querySelectorAll('.add-to-basket-button').forEach(button => {
 //    button.addEventListener('click', async function () {
@@ -144,7 +162,6 @@ $(document).ready(function () {
 //            const result = await response.json();
 
 //            if (response.ok) {
-
 //                if (result.redirectUrl) {
 //                    // Handle redirection if provided
 //                    Swal.fire({
@@ -163,9 +180,8 @@ $(document).ready(function () {
 //                        text: result.message,
 //                        icon: 'success',
 //                        timer: 1200,
+//                        showConfirmButton: false
 //                    });
-
-//                    document.querySelector(".basket-products").insertAdjacentHTML('beforeend', result);
 
 //                    document.querySelector('.count-basket').textContent = result.uniqueProductCount;
 
@@ -193,9 +209,10 @@ $(document).ready(function () {
 //    });
 //});
 
-function updateBasketUI() {
-    // Implement this function to refresh the basket display, count items, etc.
-}
+//function updateBasketUI() {
+//    // Implement this function to refresh the basket display, count items, etc.
+//}
+
 
 const debounce = (func, delay) => {
     let timeout;

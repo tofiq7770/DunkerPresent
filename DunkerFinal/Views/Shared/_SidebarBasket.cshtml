@@ -1,5 +1,7 @@
 ﻿@model BasketProduct
-
+@{
+    Layout = null;
+}
 <div class="basket-product">
     <a class="basket-img" href="#">
         <img src="~/assets/img/@Model.Product.ProductImages.FirstOrDefault(m=>m.IsMain).Image"
