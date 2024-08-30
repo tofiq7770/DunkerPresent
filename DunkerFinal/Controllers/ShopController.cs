@@ -256,66 +256,55 @@ namespace DunkerFinal.Controllers
         [HttpPost]
         public async Task<IActionResult> AddComment(int productId, string message, int rating)
         {
-            // Check if the user is authenticated
             if (!User.Identity.IsAuthenticated)
             {
                 return Json(new { success = false, message = "You need to be logged in to add a comment." });
             }
 
-            // Retrieve the currently authenticated user's ID
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            // Ensure userId is available
             if (string.IsNullOrEmpty(userId))
             {
                 return Json(new { success = false, message = "User ID could not be found." });
             }
 
-            // Fetch the user from the database
             var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
                 return Json(new { success = false, message = "User not found." });
             }
 
-            // Find the product
             var product = await _context.Products.FindAsync(productId);
             if (product == null)
             {
                 return Json(new { success = false, message = "Product not found." });
             }
 
-            // Create the review
             var review = new Review
             {
                 ProductId = productId,
                 Message = message,
                 CreatedTime = DateTime.Now,
-                AppUser = user
+                AppUser = user,
             };
 
-            // Add the review to the database
             _context.Reviews.Add(review);
             await _context.SaveChangesAsync();
 
-            // Return a success response
-            return Json(new { success = true });
+            return Json(new { success = true, reviewId = review.Id }); // Include reviewId in the response
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteComment(int commentId)
         {
-            // Check if the user is authenticated
             if (!User.Identity.IsAuthenticated)
             {
                 return Json(new { success = false, message = "You need to be logged in to delete a comment." });
             }
 
-            // Retrieve the currently authenticated user's ID
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Find the comment
             var comment = await _context.Reviews
                                         .Include(r => r.AppUser)
                                         .FirstOrDefaultAsync(r => r.Id == commentId);
@@ -325,13 +314,11 @@ namespace DunkerFinal.Controllers
                 return Json(new { success = false, message = "Comment not found." });
             }
 
-            // Check if the user is the author of the comment
             if (comment.AppUser.Id != userId)
             {
                 return Json(new { success = false, message = "You are not authorized to delete this comment." });
             }
 
-            // Remove the comment
             _context.Reviews.Remove(comment);
             await _context.SaveChangesAsync();
 

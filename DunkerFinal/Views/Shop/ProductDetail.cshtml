@@ -195,6 +195,7 @@
                                                             </div>
                                                             @if (item.AppUser.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
                                                             {
+
                                                                 <button class="delete-comment-btn btn btn-outline-danger btn-sm mt-2 float-right" data-comment-id="@item.Id">
                                                                     <i class="fas fa-trash-alt"></i> Delete
                                                                 </button>
@@ -263,48 +264,49 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
-            $('#reviewForm').on('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
+     $('#reviewForm').on('submit', function(event) {
+    event.preventDefault(); 
 
-        let formData = $(this).serialize(); // Serialize form data
+    let formData = $(this).serialize();  
 
-        $.ajax({
-            url: $(this).attr('action'),
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-                if (response.success) {
-                    let reviewHtml = `
-                        <div class="review" style="margin-bottom: 30px; padding: 20px; border: 1px solid #e2e2e2; border-radius: 8px; background-color: #f9f9f9; position: relative;">
-                            <div class="d-flex align-items-start">
-                                <img src="@Url.Content("~/assets/img/User.png")" alt="User Avatar" class="rounded-circle mr-3" style="width: 70px; height: 70px; object-fit: cover; margin-right: 20px;">
-                                <div class="flex-grow-1">
-                                    <p class="mb-1 text-muted" style="margin: 0; color: #777; font-size: 14px;">${new Date().toLocaleDateString()}</p>
-                                    <h5 class="font-weight-bold mb-1" style="margin: 5px 0; font-size: 18px; color: #333;">${$('#name').val()}</h5>
-                                    <p style="font-size: 16px; color: #555; margin-bottom: 10px;">${$('#review').val()}</p>
-                                    <div class="stars" style="font-size: 18px;">
-                                        ${'<span class="text-warning" style="color: #ffc107;">&#9733;</span>'.repeat($('input[name="rating"]:checked').val())}
-                                        ${'<span class="text-secondary">&#9733;</span>'.repeat(5 - $('input[name="rating"]:checked').val())}
-                                    </div>
-                                    <button class="delete-comment-btn btn btn-outline-danger btn-sm mt-2 float-right" style="position: absolute; top: 10px; right: 10px;">
-                                        <i class="fas fa-trash-alt"></i> Delete
-                                    </button>
+    $.ajax({
+        url: $(this).attr('action'),
+        type: 'POST',
+        data: formData,
+        success: function(response) {
+            if (response.success) {
+                let reviewHtml = `
+                    <div class="review" style="margin-bottom: 30px; padding: 20px; border: 1px solid #e2e2e2; border-radius: 8px; background-color: #f9f9f9;">
+                        <div class="d-flex align-items-start">
+                            <img src="@Url.Content("~/assets/img/User.png")" alt="User Avatar" class="rounded-circle mr-3" style="width: 70px; height: 70px; object-fit: cover; margin-right: 20px;">
+                            <div class="flex-grow-1">
+                                <p class="mb-1 text-muted" style="margin: 0; color: #777; font-size: 14px;">${new Date().toLocaleDateString()}</p>
+                                <h5 class="font-weight-bold mb-1" style="margin: 5px 0; font-size: 18px; color: #333;">${$('#name').val()}</h5>
+                                <p style="font-size: 16px; color: #555; margin-bottom: 10px;">${$('#review').val()}</p>
+                                <div class="stars" style="font-size: 18px;">
+                                    ${'<span class="text-warning" style="color: #ffc107;">&#9733;</span>'.repeat($('input[name="rating"]:checked').val())}
+                                    ${'<span class="text-secondary">&#9733;</span>'.repeat(5 - $('input[name="rating"]:checked').val())}
                                 </div>
+                                <button class="delete-comment-btn btn btn-outline-danger btn-sm mt-2 float-right" data-comment-id="${response.reviewId}">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </button>
                             </div>
                         </div>
-                    `;
-                    $('#reviewContainer').prepend(reviewHtml);
-                    $('#reviewForm')[0].reset();
-                    updateReviewCount();
-                } else {
-                    alert(response.message);
-                }
-            },
-            error: function(xhr, status, error) {
-                alert('An error occurred: ' + error);
+                    </div>
+                `;
+                $('#reviewContainer').prepend(reviewHtml);
+                $('#reviewForm')[0].reset();
+                updateReviewCount();
+            } else {
+                alert(response.message);
             }
-        });
+        },
+        error: function(xhr, status, error) {
+            alert('An error occurred: ' + error);
+        }
     });
+});
+
 
     function updateReviewCount() {
         let reviewCount = $('#reviewContainer .review').length;
@@ -317,57 +319,57 @@
 </script>
 
 <script>
-     $(document).on('click', '.delete-comment-btn', function () {
-        const commentId = $(this).data('comment-id');
-        const deleteUrl = '@Url.Action("DeleteComment", "Shop")'; // Replace 'YourControllerName' with your actual controller name
+    $(document).on('click', '.delete-comment-btn', function () {
+    const commentId = $(this).data('comment-id');
+    const deleteUrl = '@Url.Action("DeleteComment", "Shop")';  
 
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: deleteUrl,
-                    type: 'POST',
-                    data: { commentId: commentId },
-                    headers: {
-                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() // CSRF token
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            Swal.fire(
-                                'Deleted!',
-                                response.message,
-                                'success'
-                            );
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: deleteUrl,
+                type: 'POST',
+                data: { commentId: commentId },
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() // CSRF token
+                },
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire(
+                            'Deleted!',
+                            response.message,
+                            'success'
+                        );
 
-                            // Remove the comment from the DOM
-                            $(`button[data-comment-id="${commentId}"]`).closest('.review').remove();
-                            updateReviewCount();
-                        } else {
-                            Swal.fire(
-                                'Error!',
-                                response.message,
-                                'error'
-                            );
-                        }
-                    },
-                    error: function () {
+                        // Remove the comment from the DOM
+                        $(`button[data-comment-id="${commentId}"]`).closest('.review').remove();
+                        updateReviewCount();
+                    } else {
                         Swal.fire(
                             'Error!',
-                            'An error occurred while trying to delete the comment.',
+                            response.message,
                             'error'
                         );
                     }
-                });
-            }
-        });
+                },
+                error: function () {
+                    Swal.fire(
+                        'Error!',
+                        'An error occurred while trying to delete the comment.',
+                        'error'
+                    );
+                }
+            });
+        }
     });
+});
 
 </script>
 
