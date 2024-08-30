@@ -208,12 +208,11 @@ document.querySelectorAll('.add-to-basket-button').forEach(button => {
                         timer: 1200,
                         showConfirmButton: false
                     });
-
-                    // Update basket count
+                     
                     document.querySelector('.count-basket').textContent = result.uniqueProductCount;
+                    document.querySelector('.amount').textContent = result.uniqueProductCount;
 
-                    if (!result.isUpdate) {
-                        // Only add new HTML for new products
+                    if (!result.isUpdate) { 
                         document.querySelector(".basket-products").innerHTML += result.partialView;
                     }
                 }
@@ -240,8 +239,7 @@ document.querySelectorAll('.add-to-basket-button').forEach(button => {
 });
 
 
-function updateBasketUI() {
-    // Implement this function to refresh the basket display, count items, etc.
+function updateBasketUI() { 
 }
 
 

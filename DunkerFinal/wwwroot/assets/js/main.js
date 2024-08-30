@@ -116,6 +116,7 @@ document.querySelectorAll('.add-to-basket-button').forEach(button => {
 
                     // Update basket count
                     document.querySelector('.count-basket').textContent = result.uniqueProductCount;
+                    document.querySelector('.amount').textContent = result.uniqueProductCount;
 
                     if (!result.isUpdate) {
                         // Only add new HTML for new products
