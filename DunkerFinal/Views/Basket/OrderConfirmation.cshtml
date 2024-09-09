@@ -1,0 +1,70 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .confirmation-container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .confirmation-container h1 {
+            color: #28a745;
+            font-size: 2rem;
+        }
+        .confirmation-container p {
+            font-size: 1.2rem;
+            color: #6c757d;
+        }
+        .confirmation-container button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-container">
+        <h1>Order Confirmed!</h1>
+        <p>Your order has been successfully processed. Thank you for shopping with us.</p>
+        <button class="btn btn-primary" id="backHome">Back to Home</button>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+             const urlParams = new URLSearchParams(window.location.search);
+            const orderConfirmed = urlParams.get('orderConfirmed');
+
+            if (orderConfirmed === 'true') {
+                Swal.fire({
+                    title: 'Order Confirmed',
+                    text: 'Your basket has been cleared and the order has been processed.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            }
+             
+            $('#backHome').on('click', function() {
+                window.location.href = '/Home/Index';  
+            });
+        });
+    </script>
+</body>
+</html>

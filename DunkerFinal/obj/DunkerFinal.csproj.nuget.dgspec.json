@@ -147,6 +147,10 @@
               "target": "Package",
               "version": "[4.7.1, )"
             },
+            "Stripe.net": {
+              "target": "Package",
+              "version": "[45.11.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.6.2, )"
@@ -241,6 +245,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[6.0.32, )"
+            },
+            "Stripe.net": {
+              "target": "Package",
+              "version": "[45.11.0, )"
             }
           },
           "imports": [
@@ -329,6 +337,10 @@
             "Microsoft.Extensions.DependencyInjection": {
               "target": "Package",
               "version": "[6.0.1, )"
+            },
+            "Stripe.net": {
+              "target": "Package",
+              "version": "[45.11.0, )"
             }
           },
           "imports": [

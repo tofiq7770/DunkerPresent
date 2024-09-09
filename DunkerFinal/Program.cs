@@ -1,8 +1,8 @@
-using DunkerFinal.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Repository;
 using Repository.DAL;
 using Service;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,32 +20,9 @@ var app = builder.Build();
 
 
 
+//app.UseMiddleware<GlobalExceptionHandler>();
 
-
-//if (app.Environment.IsDevelopment())
-//{
-//    //DeveloperExceptionPageOptions developerExceptionPageOptions = new DeveloperExceptionPageOptions();
-//    //developerExceptionPageOptions.SourceCodeLineCount = 1;
-//    //app.UseDeveloperExceptionPage(developerExceptionPageOptions);
-
-//    //app.UseExceptionHandler("/Home/Error");
-//    //// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-//    //app.UseHsts();
-
-//    app.UseMiddleware<GlobalExceptionHandler>();
-//}
-//else
-//{
-//    app.UseExceptionHandler("/Home/Error");
-//    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-//    app.UseHsts();
-//}
-
-
-
-app.UseMiddleware<GlobalExceptionHandler>();
-
-app.UseStatusCodePagesWithReExecute("/StatusCodeError/{0}");
+//app.UseStatusCodePagesWithReExecute("/StatusCodeError/{0}");
 
 
 
@@ -55,6 +32,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
 app.UseAuthentication();
 
