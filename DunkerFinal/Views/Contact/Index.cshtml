@@ -183,24 +183,24 @@
                         </div>
                     </div>
                     <div class="col-lg-7">
-                        <form id="contactForm" class="forms-sample" method="post" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <input asp-for="Name" class="w-100 form-control border-0 py-3 mb-4" placeholder="Your Name">
-                                <span class="text-danger" asp-validation-for="Name"></span>
-                            </div>
+                     <form id="contactForm" class="forms-sample" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <input asp-for="Name" id="name" class="w-100 form-control border-0 py-3 mb-4" placeholder="Your Name">
+        <span class="text-danger" asp-validation-for="Name"></span>
+    </div>
 
-                            <div class="form-group">
-                                <input asp-for="Email" type="email" class="w-100 form-control border-0 py-3 mb-4" placeholder="Enter Your Email">
-                                <span class="text-danger" asp-validation-for="Email"></span>
-                            </div>
+    <div class="form-group">
+        <input asp-for="Email" id="email" type="email" class="w-100 form-control border-0 py-3 mb-4" placeholder="Enter Your Email">
+        <span class="text-danger" asp-validation-for="Email"></span>
+    </div>
 
-                            <div class="form-group">
-                                <textarea asp-for="Message" class="w-100 form-control border-0 mb-4" rows="5" cols="10" placeholder="Your Message"></textarea>
-                                <span class="text-danger" asp-validation-for="Message"></span>
-                            </div>
+    <div class="form-group">
+        <textarea asp-for="Message" id="message" class="w-100 form-control border-0 mb-4" rows="5" cols="10" placeholder="Your Message"></textarea>
+        <span class="text-danger" asp-validation-for="Message"></span>
+    </div>
 
-                            <button id="submitButton" class="w-100 btn form-control border-secondary py-3 bg-white text-dark" type="submit">Submit</button>
-                        </form>
+    <button id="submitButton" class="w-100 btn form-control border-secondary py-3 bg-white text-dark" type="submit">Submit</button>
+</form>
 
 
                     </div>
@@ -234,7 +234,7 @@
     <!-- Contact End -->
 </main>
 <!-- Main End -->
-<script>
+@*<script>
     document.getElementById('contactForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the default form submission
 
@@ -246,6 +246,40 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 // Optionally submit the form after the alert is closed
+                document.getElementById('contactForm').submit();
+            }
+        });
+    });
+</script>*@
+<script>
+    document.getElementById('contactForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Get form input values
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
+
+        // Validation check: ensure fields are not null or empty
+        if (!name || !email || !message) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'All fields are required. Please fill out every field.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return; // Stop the form submission if any field is empty
+        }
+
+        // Show success alert if validation passes
+        Swal.fire({
+            title: 'Success!',
+            text: 'Message was sent.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit the form after the alert is closed
                 document.getElementById('contactForm').submit();
             }
         });
