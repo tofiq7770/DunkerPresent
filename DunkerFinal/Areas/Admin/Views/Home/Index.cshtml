@@ -1,5 +1,174 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model DunkerFinal.ViewModels.Dashboard.DashboardVM
+
 @{
+    ViewData["Title"] = "Dashboard";
 }
+
+<div class="container mt-4">
+    <h1>@ViewData["Title"]</h1>
+
+    <!-- Display Product Count and Other Stats -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Products</h5>
+                    <p class="card-text">@Model.ProductCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Categories</h5>
+                    <p class="card-text">@Model.CategoryCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Brands</h5>
+                    <p class="card-text">@Model.BrandCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Tags</h5>
+                    <p class="card-text">@Model.TagCount</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <canvas id="productColorsChart" width="400" height="400"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="productTagsChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(function () { 
+        // Data from the server
+        var productColorsData = {
+            labels: @Html.Raw(Json.Serialize(Model.ColorLabels)),
+            datasets: [{
+                data: @Html.Raw(Json.Serialize(Model.ProductColors)),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(153, 102, 255, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        var productTagsData = {
+            labels: @Html.Raw(Json.Serialize(Model.TagLabels)),
+            datasets: [{
+                label: '# of Products',
+                data: @Html.Raw(Json.Serialize(Model.ProductTags)),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        var pieChartOptions = {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            var dataset = tooltipItem.dataset;
+                            var total = dataset.data.reduce((acc, val) => acc + val, 0);
+                            var currentValue = dataset.data[tooltipItem.dataIndex];
+                            var percentage = ((currentValue / total) * 100).toFixed(2);
+                            return tooltipItem.label + ': ' + currentValue + ' (' + percentage + '%)';
+                        }
+                    }
+                }
+            }
+        };
+
+        var barChartOptions = {
+            responsive: true,
+            scales: {
+                x: {
+                    beginAtZero: true
+                },
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            var dataset = tooltipItem.dataset;
+                            var currentValue = dataset.data[tooltipItem.dataIndex];
+                            return tooltipItem.label + ': ' + currentValue;
+                        }
+                    }
+                }
+            }
+        };
+
+        // Render Product Colors Pie Chart
+        if ($("#productColorsChart").length) {
+            var productColorsCanvas = $("#productColorsChart").get(0).getContext("2d");
+            var productColorsChart = new Chart(productColorsCanvas, {
+                type: 'pie',
+                data: productColorsData,
+                options: pieChartOptions
+            });
+        }
+
+        // Render Product Tags Bar Chart
+        if ($("#productTagsChart").length) {
+            var productTagsCanvas = $("#productTagsChart").get(0).getContext("2d");
+            var productTagsChart = new Chart(productTagsCanvas, {
+                type: 'bar',
+                data: productTagsData,
+                options: barChartOptions
+            });
+        }
+    });
+</script>
