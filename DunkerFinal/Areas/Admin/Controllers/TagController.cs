@@ -71,6 +71,13 @@ namespace DunkerFinal.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid) return View(request);
 
+
+            if (await _TagService.AnyAsync(request.Name))
+            {
+                ModelState.AddModelError("Name", $"{request.Name} is already exist!");
+                return View(request);
+            }
+
             if (id == null) return BadRequest();
 
             var Tag = await _TagService.GetByIdAsync((int)id);

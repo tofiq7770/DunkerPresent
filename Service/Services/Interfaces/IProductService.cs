@@ -10,7 +10,6 @@ namespace Service.Services.Interfaces
         Task<bool> AnyAsync(string name);
         public Task SendViewBagElements(dynamic ViewBag);
         public Task<int> CreateAsync(ProductCreateVM model);
-
         public Task<bool> DeleteAsync(int id, string ImagePath);
         public Task<ProductUpdateVM?> GetUpdatedProductAsync(int id, dynamic ViewBag);
         public Task UpdateAsync(ProductUpdateVM model);

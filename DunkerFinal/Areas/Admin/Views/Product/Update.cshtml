@@ -4,7 +4,6 @@
 <style>
     /* General Card Styling */
     .card {
-
         border-radius: 10px;
     }
 
@@ -99,37 +98,36 @@
         margin: 0.2rem;
     }
     /* Color Icon Styling */
-.color-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 2px solid #ddd;
-    display: inline-block;
-    position: relative;
-}
+    .color-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 2px solid #ddd;
+        display: inline-block;
+        position: relative;
+    }
 
-/* Overlay Styling for Delete Button */
-.position-relative .color-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%; 
-    opacity: 0;
-    transition: opacity 0.3s ease; 
-}
+    /* Overlay Styling for Delete Button */
+    .position-relative .color-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
 
-.position-relative:hover .color-overlay {
-    opacity: 1;
-}
+    .position-relative:hover .color-overlay {
+        opacity: 1;
+    }
 
-.color-overlay a {
-    color: #fff;
-    padding: 0.3rem 0.5rem;
-    font-size: 0.75rem;
-    text-align: center;
-}
-
+    .color-overlay a {
+        color: #fff;
+        padding: 0.3rem 0.5rem;
+        font-size: 0.75rem;
+        text-align: center;
+    }
 
 </style>
 <div class="col-md-6 grid-margin stretch-card">
@@ -140,30 +138,37 @@
 
                 <!-- Product Images -->
                 <div class="mb-4">
-                    @foreach (var item in Model.ProductImages)
+                    @if (Model.ProductImages != null)
                     {
-                        <div class="position-relative d-inline-block mb-3">
-                            <img class="img-thumbnail product-image images" src="~/assets/img/@item.Image" style="width:150px; height:150px; border: @(item.IsMain ? "5" : "0")px solid red;" />
-                            <div class="overlay d-flex justify-content-center align-items-center">
-                                <a class="btn btn-danger mdi mdi-delete delete-img me-2" img-id="@item.Id" product-id="@Model.Id"></a>
-                                <a class="btn btn-primary mdi mdi-checkbox-marked main-img" img-id="@item.Id" product-id="@Model.Id"></a>
+                        @foreach (var item in Model.ProductImages)
+                        {
+                            <div class="position-relative d-inline-block mb-3">
+                                <img class="img-thumbnail product-image images" src="~/assets/img/@item.Image" style="width:150px; height:150px; border: @(item.IsMain ? "5" : "0")px solid red;" />
+                                <div class="overlay d-flex justify-content-center align-items-center">
+                                    <a class="btn btn-danger mdi mdi-delete delete-img me-2" img-id="@item.Id" product-id="@Model.Id"></a>
+                                    <a class="btn btn-primary mdi mdi-checkbox-marked main-img" img-id="@item.Id" product-id="@Model.Id"></a>
+                                </div>
                             </div>
-                        </div>
+                        }
                     }
                 </div>
 
 
                 <!-- Product Colors -->
-              
+
                 <div class="mb-4">
-                    @foreach (var item in Model.Colors)
+                    @if (Model.Colors != null)
                     {
-                        <div class="position-relative d-inline-block mb-2">
-                            <div class="color-icon" style="background-color:@item.ColorName;"></div>
-                            <div class="color-overlay d-flex justify-content-center align-items-center">
-                                <a style=" margin-right: 0;" class="btn btn-danger mdi mdi-delete delete-color" color-id="@item.Id"></a>
+                        @foreach (var item in Model.Colors)
+                        {
+                            <div class="position-relative d-inline-block mb-2">
+                                <div class="color-icon" style="background-color:@item.ColorName;"></div>
+                                <div class="color-overlay d-flex justify-content-center align-items-center">
+                                    <a style=" margin-right: 0;" class="btn btn-danger mdi mdi-delete delete-color" color-id="@item.Id"></a>
+                                </div>
                             </div>
-                        </div>
+                        }
+
                     }
                 </div>
 
@@ -219,7 +224,7 @@
                 <!-- Price -->
                 <div class="mb-3 form-group">
                     <label asp-for="Price">Price</label>
-                    <input asp-for="Price" type="number"  class="form-control" placeholder="Enter product price">
+                    <input asp-for="Price" type="number" class="form-control" placeholder="Enter product price">
                     <span class="text-danger mt-2" asp-validation-for="Price"></span>
                 </div>
 
@@ -233,21 +238,21 @@
                 <!-- Weight -->
                 <div class="mb-3 form-group">
                     <label asp-for="Weight">Weight</label>
-                    <input asp-for="Weight"    class="form-control" placeholder="Enter weight">
+                    <input asp-for="Weight" class="form-control" placeholder="Enter weight">
                     <span class="text-danger mt-2" asp-validation-for="Weight"></span>
                 </div>
 
                 <!-- Rating -->
                 <div class="mb-3 form-group">
                     <label asp-for="Rating">Rating</label>
-                    <input asp-for="Rating"    class="form-control" placeholder="Enter product rating">
+                    <input asp-for="Rating" class="form-control" placeholder="Enter product rating">
                     <span class="text-danger mt-2" asp-validation-for="Rating"></span>
                 </div>
 
                 <!-- Quantity -->
                 <div class="mb-3 form-group">
                     <label asp-for="Quantity">Quantity</label>
-                    <input asp-for="Quantity" type="number"  class="form-control" placeholder="Enter available quantity">
+                    <input asp-for="Quantity" type="number" class="form-control" placeholder="Enter available quantity">
                     <span class="text-danger mt-2" asp-validation-for="Quantity"></span>
                 </div>
 

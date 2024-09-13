@@ -173,6 +173,18 @@ namespace DunkerFinal.Areas.Admin.Controllers
             ViewBag.Colors = await _colorService.GetAllSelectListAsync(await _productColorService.GetAllColorIdsByProductId(id));
             ViewBag.Tags = await _tagService.GetAllSelectListAsync();
 
+            if (!ModelState.IsValid) return View(request);
+
+
+            var productCount = await _context.Products.Where(p => p.Name.ToLower() == request.Name.Trim().ToLower() && p.Id != id).CountAsync();
+
+            if (productCount > 0)
+            {
+                ModelState.AddModelError("Name", $"{request.Name} already exists!");
+                return View(request);
+            }
+
+
             if (request.Images != null)
             {
                 foreach (var item in request.Images)
@@ -337,5 +349,7 @@ namespace DunkerFinal.Areas.Admin.Controllers
             return View(model);
 
         }
+
+
     }
 }

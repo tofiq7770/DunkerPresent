@@ -42,6 +42,7 @@ namespace DunkerFinal.Areas.Admin.Controllers
         {
 
             if (!ModelState.IsValid) return View(vm);
+
             if (await _service.AnyAsync(vm.Name))
             {
                 ModelState.AddModelError("Name", $"{vm.Name} is already exist!");
@@ -81,6 +82,11 @@ namespace DunkerFinal.Areas.Admin.Controllers
         [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> Update(BrandUpdateVM vm)
         {
+            if (await _service.AnyAsync(vm.Name))
+            {
+                ModelState.AddModelError("Name", $"{vm.Name} is already exist!");
+                return View(vm);
+            }
             var result = await _service.UpdateAsync(vm, _imagePath);
 
             if (result is null)

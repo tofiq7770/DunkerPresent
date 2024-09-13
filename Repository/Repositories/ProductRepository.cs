@@ -16,7 +16,6 @@ namespace Repository.Repositories
         {
             return await _context.Products.AnyAsync(m => m.Name == name);
         }
-
         public async Task<List<Product>> GetAllWithDatas()
         {
             return await _entities.Include(e => e.ProductColors).Include(e => e.Brand).Include(m => m.Category)
