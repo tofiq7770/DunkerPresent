@@ -1,3 +1,4 @@
+using DunkerFinal.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Repository;
 using Repository.DAL;
@@ -20,9 +21,9 @@ var app = builder.Build();
 
 
 
-//app.UseMiddleware<GlobalExceptionHandler>();
+app.UseMiddleware<GlobalExceptionHandler>();
 
-//app.UseStatusCodePagesWithReExecute("/StatusCodeError/{0}");
+app.UseStatusCodePagesWithReExecute("/StatusCodeError/{0}");
 
 
 

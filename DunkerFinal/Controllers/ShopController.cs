@@ -56,7 +56,7 @@ namespace DunkerFinal.Controllers
         }
 
 
-        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 9)
         {
             var userId = _userManager.GetUserId(User);
 
@@ -134,8 +134,7 @@ namespace DunkerFinal.Controllers
             return View(viewModel);
         }
 
-
-        public async Task<IActionResult> Sorting(string sort)
+        public async Task<IActionResult> Sorting(string sort, int pageNumber = 1, int pageSize = 9)
         {
             if (_productService == null)
             {
@@ -148,6 +147,7 @@ namespace DunkerFinal.Controllers
                 throw new InvalidOperationException("Products could not be retrieved.");
             }
 
+            // Sorting logic
             switch (sort)
             {
                 case "SORT BY RATING":
@@ -167,9 +167,15 @@ namespace DunkerFinal.Controllers
                     break;
             }
 
+            // Convert to list before applying pagination
+            var productList = products.ToList();
+
+            // Apply pagination
+            var paginatedProducts = PagedList<Product>.Create(productList, pageNumber, pageSize);
+
             ShopVM model = new()
             {
-                Products = products,
+                Products = paginatedProducts,
                 Brands = await _brandService.GetAllAsync(),
                 Categories = await _categoryService.GetAllAsync(),
                 Colors = await _colorService.GetAllAsync(),
@@ -177,37 +183,39 @@ namespace DunkerFinal.Controllers
                 Wishlists = await _context.Wishlists.ToListAsync(),
                 ProductColors = await _context.ProductColors.ToListAsync(),
                 ProductTags = await _context.ProductTags.ToListAsync(),
+                PageNumber = pageNumber,
+                TotalPages = paginatedProducts.TotalPages
             };
-            if (model == null)
-            {
-                throw new InvalidOperationException("Model could not be created.");
-            }
 
             return View("Index", model);
         }
 
-        public async Task<IActionResult> Search(string searchText)
+
+        public async Task<IActionResult> Search(string searchText, int pageNumber = 1, int pageSize = 9)
         {
             if (_productService == null)
             {
                 throw new InvalidOperationException("Product service is not initialized.");
             }
 
-            IEnumerable<Product> products;
+            List<Product> products;
 
             if (!string.IsNullOrWhiteSpace(searchText))
             {
                 products = await _productService.GetAllAsync();
-                products = products.Where(p => p.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase));
+                products = products.Where(p => p.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).ToList();
             }
             else
             {
                 products = await _productService.GetAllAsync();
             }
 
+            // Apply pagination
+            var paginatedProducts = PagedList<Product>.Create(products, pageNumber, pageSize);
+
             ShopVM model = new()
             {
-                Products = products,
+                Products = paginatedProducts,
                 Brands = await _brandService.GetAllAsync(),
                 Categories = await _categoryService.GetAllAsync(),
                 Colors = await _colorService.GetAllAsync(),
@@ -215,12 +223,101 @@ namespace DunkerFinal.Controllers
                 Wishlists = await _context.Wishlists.ToListAsync(),
                 ProductColors = await _context.ProductColors.ToListAsync(),
                 ProductTags = await _context.ProductTags.ToListAsync(),
+                PageNumber = pageNumber,
+                TotalPages = paginatedProducts.TotalPages
             };
 
             return View("Index", model);
         }
 
-        public async Task<IActionResult> Filter(IEnumerable<int> categories, IEnumerable<int> brands, IEnumerable<int> colors, int minPrice, int maxPrice)
+
+        //public async Task<IActionResult> Sorting(string sort)
+        //{
+        //    if (_productService == null)
+        //    {
+        //        throw new InvalidOperationException("Product service is not initialized.");
+        //    }
+
+        //    IEnumerable<Product> products = await _productService.GetAllAsync();
+        //    if (products == null)
+        //    {
+        //        throw new InvalidOperationException("Products could not be retrieved.");
+        //    }
+
+        //    switch (sort)
+        //    {
+        //        case "SORT BY RATING":
+        //            products = products.OrderByDescending(m => m.Rating);
+        //            break;
+        //        case "SORT BY LATEST":
+        //            products = products.OrderByDescending(m => m.CreatedTime);
+        //            break;
+        //        case "SORT BY PRICE HIGH TO LOW":
+        //            products = products.OrderByDescending(m => m.Price);
+        //            break;
+        //        case "SORT BY PRICE LOW TO HIGH":
+        //            products = products.OrderBy(m => m.Price);
+        //            break;
+        //        default:
+        //            products = products.OrderBy(m => m.Name);
+        //            break;
+        //    }
+
+        //    ShopVM model = new()
+        //    {
+        //        Products = products,
+        //        Brands = await _brandService.GetAllAsync(),
+        //        Categories = await _categoryService.GetAllAsync(),
+        //        Colors = await _colorService.GetAllAsync(),
+        //        WishlistProducts = await _context.WishlistProducts.ToListAsync(),
+        //        Wishlists = await _context.Wishlists.ToListAsync(),
+        //        ProductColors = await _context.ProductColors.ToListAsync(),
+        //        ProductTags = await _context.ProductTags.ToListAsync(),
+        //    };
+        //    if (model == null)
+        //    {
+        //        throw new InvalidOperationException("Model could not be created.");
+        //    }
+
+        //    return View("Index", model);
+        //}
+
+        //public async Task<IActionResult> Search(string searchText)
+        //{
+        //    if (_productService == null)
+        //    {
+        //        throw new InvalidOperationException("Product service is not initialized.");
+        //    }
+
+        //    IEnumerable<Product> products;
+
+        //    if (!string.IsNullOrWhiteSpace(searchText))
+        //    {
+        //        products = await _productService.GetAllAsync();
+        //        products = products.Where(p => p.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase));
+        //    }
+        //    else
+        //    {
+        //        products = await _productService.GetAllAsync();
+        //    }
+
+        //    ShopVM model = new()
+        //    {
+        //        Products = products,
+        //        Brands = await _brandService.GetAllAsync(),
+        //        Categories = await _categoryService.GetAllAsync(),
+        //        Colors = await _colorService.GetAllAsync(),
+        //        WishlistProducts = await _context.WishlistProducts.ToListAsync(),
+        //        Wishlists = await _context.Wishlists.ToListAsync(),
+        //        ProductColors = await _context.ProductColors.ToListAsync(),
+        //        ProductTags = await _context.ProductTags.ToListAsync(),
+        //    };
+
+        //    return View("Index", model);
+        //}
+
+
+        public async Task<IActionResult> Filter(IEnumerable<int> categories, IEnumerable<int> brands, IEnumerable<int> colors, int minPrice, int maxPrice, int pageNumber = 1, int pageSize = 9)
         {
             var products = await _productService.GetAllAsync();
 
@@ -241,10 +338,11 @@ namespace DunkerFinal.Controllers
 
             products = products.Where(p => p.Price >= minPrice && p.Price <= maxPrice).ToList();
 
+            var paginatedProducts = PagedList<Product>.Create(products, pageNumber, pageSize);
 
             ShopVM model = new()
             {
-                Products = products,
+                Products = paginatedProducts,
                 Brands = await _brandService.GetAllAsync(),
                 Categories = await _categoryService.GetAllAsync(),
                 Colors = await _colorService.GetAllAsync(),
@@ -252,10 +350,50 @@ namespace DunkerFinal.Controllers
                 Wishlists = await _context.Wishlists.ToListAsync(),
                 ProductColors = await _context.ProductColors.ToListAsync(),
                 ProductTags = await _context.ProductTags.ToListAsync(),
+                PageNumber = pageNumber,
+                TotalPages = paginatedProducts.TotalPages
             };
 
             return View("Index", model);
         }
+
+
+        //public async Task<IActionResult> Filter(IEnumerable<int> categories, IEnumerable<int> brands, IEnumerable<int> colors, int minPrice, int maxPrice)
+        //{
+        //    var products = await _productService.GetAllAsync();
+
+        //    if (categories != null && categories.Any())
+        //    {
+        //        products = products.Where(p => categories.Contains(p.CategoryId)).ToList();
+        //    }
+
+        //    if (brands != null && brands.Any())
+        //    {
+        //        products = products.Where(p => brands.Contains(p.BrandId)).ToList();
+        //    }
+
+        //    if (colors != null && colors.Any())
+        //    {
+        //        products = products.Where(p => p.ProductColors != null && p.ProductColors.Any(pc => colors.Contains(pc.ColorId))).ToList();
+        //    }
+
+        //    products = products.Where(p => p.Price >= minPrice && p.Price <= maxPrice).ToList();
+
+
+        //    ShopVM model = new()
+        //    {
+        //        Products = products,
+        //        Brands = await _brandService.GetAllAsync(),
+        //        Categories = await _categoryService.GetAllAsync(),
+        //        Colors = await _colorService.GetAllAsync(),
+        //        WishlistProducts = await _context.WishlistProducts.ToListAsync(),
+        //        Wishlists = await _context.Wishlists.ToListAsync(),
+        //        ProductColors = await _context.ProductColors.ToListAsync(),
+        //        ProductTags = await _context.ProductTags.ToListAsync(),
+        //    };
+
+        //    return View("Index", model);
+        //}
 
         [HttpPost]
         public async Task<IActionResult> AddComment(int productId, string message, int rating)
