@@ -95,6 +95,8 @@ namespace DunkerFinal.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
 
         }
+
+
         [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> Update(int id)
         {

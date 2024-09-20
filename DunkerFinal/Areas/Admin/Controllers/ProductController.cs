@@ -278,23 +278,11 @@ namespace DunkerFinal.Areas.Admin.Controllers
         [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> Delete(int id)
         {
-            //if (id <= 0) return BadRequest();
-
-            //var product = await _service.GetByIdAsync(id);
-
-            //if (product is null) return NotFound();
-
-
-            //foreach (var image in product.ProductImages)
-            //{
-            //    image.Image.DeleteFile(_imagePath);
-            //}
-
-            //await _service.DeleteAsync(id, _imagePath);
-
             if (id <= 0) return BadRequest();
 
-            Product product = await _context.Products.Include(p => p.ProductImages).FirstOrDefaultAsync(p => p.Id == id);
+            Product product = await _context.Products
+                                            .Include(p => p.ProductImages)
+                                            .FirstOrDefaultAsync(p => p.Id == id);
 
             if (product is null) return NotFound();
 
@@ -304,11 +292,13 @@ namespace DunkerFinal.Areas.Admin.Controllers
             }
 
             _context.Products.Remove(product);
-
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
+
+
+
         [Authorize(Roles = "SuperAdmin, Admin")]
         public async Task<IActionResult> Detail(int? id)
         {

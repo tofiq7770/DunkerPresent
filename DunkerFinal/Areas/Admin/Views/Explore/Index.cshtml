@@ -1,6 +1,4 @@
-﻿ 
-
-@model List<Explore>
+﻿@model List<Explore>
 
 <div class="col-lg-9 grid-margin stretch-card">
     <div class="card">
@@ -12,8 +10,8 @@
                 <thead>
                     <tr>
                         <th> Image </th>
-                        <th> Name </th> 
-                        <th> Brand </th> 
+                        <th> Name </th>
+                        <th> Brand </th>
                         <th> Settings </th>
                     </tr>
                 </thead>
@@ -24,12 +22,12 @@
                         <tr>
 
                             <td> <img style="width: 159px; height: 159px;  object-fit: cover;" src="~/assets/img/@item.Image"> </td>
-                            <td> @item.Name </td> 
-                            <td> @item.Brand </td> 
+                            <td> @item.Name </td>
+                            <td> @item.Brand </td>
                             <td>
                                 <a class="btn btn-info" asp-area="Admin" asp-controller="Explore" asp-route-id="@item.Id" asp-action="Detail">Detail</a>
                                 <a class="btn btn-primary" asp-area="Admin" asp-controller="Explore" asp-route-id="@item.Id" asp-action="Update">Update</a>
-                                <a class="btn btn-danger" asp-area="Admin" asp-controller="Explore" asp-route-id="@item.Id" asp-action="Delete">Delete</a>
+                                <a class="btn btn-danger" onclick="confirmDelete('@item.Id')">Delete</a>
                             </td>
                         </tr>
                     }
@@ -38,3 +36,21 @@
         </div>
     </div>
 </div>
+
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/Admin/Explore/Delete/${id}`;
+            }
+        })
+    }
+</script>

@@ -85,7 +85,8 @@
                             <td>
                                 <a class="btn btn-info" asp-area="Admin" asp-controller="Product" asp-route-id="@item.Id" asp-action="Detail">Detail</a>
                                 <a class="btn btn-primary" asp-area="Admin" asp-controller="Product" asp-route-id="@item.Id" asp-action="Update">Update</a>
-                                <a class="btn btn-danger" asp-area="Admin" asp-controller="Product" asp-route-id="@item.Id" asp-action="Delete">Delete</a>
+                                <a class="btn btn-danger" onclick="confirmDelete('@item.Id')">Delete</a>
+                                @*<a class="btn btn-danger" asp-area="Admin" asp-controller="Product" asp-route-id="@item.Id" asp-action="Delete">Delete</a>*@
                             </td>
                         </tr>
                     }
@@ -93,23 +94,50 @@
             </table>
 
             <!-- Pagination controls -->
-           <nav aria-label="Page navigation example" class="pagination-container">
+       <nav aria-label="Page navigation" class="pagination-container d-flex justify-content-center mt-4">
     <ul class="pagination">
+        <!-- Previous Button -->
         <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
-            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous</a>
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageNumber - 1)" aria-label="Previous">
+                <span aria-hidden="true">&laquo; Previous</span>
+            </a>
         </li>
+
+        <!-- Numbered Page Links -->
         @for (int i = 1; i <= Model.TotalPages; i++)
         {
             <li class="page-item @(Model.PageNumber == i ? "active" : "")">
                 <a class="page-link" asp-action="Index" asp-route-pageNumber="@i">@i</a>
             </li>
         }
+
+        <!-- Next Button -->
         <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
-            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageNumber + 1)" aria-label="Next">
+                <span aria-hidden="true">Next &raquo;</span>
+            </a>
         </li>
     </ul>
 </nav>
 
+
         </div>
     </div>
 </div>
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/Admin/Product/Delete/${id}`;
+            }
+        })
+    }
+</script>

@@ -24,5 +24,11 @@ namespace DunkerFinal.ViewModels.Shop
         public IEnumerable<BasketProduct> Baskets { get; set; }
         public IEnumerable<WishlistProduct> WishlistProducts { get; set; }
         public IEnumerable<Wishlist> Wishlists { get; set; }
+
+        public int PageNumber { get; set; }
+        public int TotalPages { get; set; }
+
+        public bool HasNextPage => PageNumber < TotalPages;
+        public bool HasPreviousPage => PageNumber > 1;
     }
 }

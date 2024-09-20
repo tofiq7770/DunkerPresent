@@ -19,6 +19,71 @@
         }
 
     }
+   /* Base Pagination Styling */
+.pagination {
+    margin: 0;
+    padding: 0;
+}
+
+.pagination .page-link {
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+    padding: 8px 16px;
+    margin: 0 5px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    text-decoration: none;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: white;
+    color: black;
+    border-color: black;
+    font-weight: bold;
+}
+
+.pagination .page-item.disabled .page-link {
+    background-color: #555;
+    color: #ddd;
+    border-color: #ddd;
+    pointer-events: none;
+}
+
+/* Hover Effects */
+.pagination .page-link:hover {
+    background-color: white;
+    color: black;
+    border-color: black;
+}
+
+/* Black Arrows */
+.pagination .page-link span[aria-hidden="true"] {
+    color: white;
+}
+
+.pagination .page-link:hover span[aria-hidden="true"] {
+    color: black;
+}
+
+/* Add subtle shadow for better focus */
+.pagination .page-link {
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.pagination .page-item.active .page-link {
+    box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive adjustments */
+@@media (max-width: 576px) {
+    .pagination .page-link {
+        padding: 6px 12px;
+        margin: 0 3px;
+    }
+}
+
+
 </style>
 
 <main>
@@ -258,9 +323,40 @@
 
                 </div>
                 </section>
+                <div>
+         <nav aria-label="Page navigation" class="pagination-container d-flex justify-content-center mt-4">
+    <ul class="pagination">
+        <!-- Previous Button -->
+        <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageNumber - 1)" aria-label="Previous">
+                <span aria-hidden="true">&laquo; Previous</span>
+            </a>
+        </li>
+
+        <!-- Numbered Page Links -->
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@i">@i</a>
+            </li>
+        }
+
+        <!-- Next Button -->
+        <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageNumber + 1)" aria-label="Next">
+                <span aria-hidden="true">Next &raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+
+
+
+
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </main>
 

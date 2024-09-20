@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using DunkerFinal.Areas.Admin.Class;
 using DunkerFinal.ViewModels.Shop;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -54,15 +55,17 @@ namespace DunkerFinal.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<IActionResult> Index()
+
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
         {
-
-
             var userId = _userManager.GetUserId(User);
 
-            ShopVM model = new()
+            var products = await _productService.GetAllAsync();
+            var paginatedProducts = PagedList<Product>.Create(products, pageNumber, pageSize);
+
+            ShopVM model = new ShopVM
             {
-                Products = await _productService.GetAllAsync(),
+                Products = paginatedProducts,
                 Categories = await _categoryService.GetAllAsync(),
                 Brands = await _brandService.GetAllAsync(),
                 Colors = await _colorService.GetAllAsync(),
@@ -70,16 +73,17 @@ namespace DunkerFinal.Controllers
                 ProductColors = await _context.ProductColors.ToListAsync(),
                 ProductTags = await _context.ProductTags.ToListAsync(),
                 Tags = await _tagService.GetAllAsync(),
+                WishlistProducts = await _context.WishlistProducts.Where(wp => wp.Wishlist.AppUserId == userId).ToListAsync(),
+                Baskets = await _context.BasketProducts.Where(bp => bp.Basket.AppUserId == userId).ToListAsync(),
 
-                WishlistProducts = await _context.WishlistProducts.Where(bp => bp.Wishlist.AppUserId == userId)
-                                        .ToListAsync(),
-                Baskets = await _context.BasketProducts
-                                        .Where(bp => bp.Basket.AppUserId == userId)
-                                        .ToListAsync()
+                PageNumber = pageNumber,
+                TotalPages = paginatedProducts.TotalPages,
             };
 
             return View(model);
         }
+
+
 
 
         public async Task<IActionResult> ProductDetail(int? id)
