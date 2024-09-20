@@ -17,7 +17,6 @@ public class GlobalExceptionHandler
         {
             await _next.Invoke(context);
         }
-
         catch (Exception e)
         {
             var message = e.Message.ToString();
@@ -29,7 +28,6 @@ public class GlobalExceptionHandler
 
     private string SanitizeErrorMessage(string errorMessage)
     {
-        // Remove control characters from the error message
         return new string(errorMessage.Where(c => !char.IsControl(c)).ToArray());
     }
 }

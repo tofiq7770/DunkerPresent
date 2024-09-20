@@ -52,6 +52,7 @@ namespace Service.Services
             if (categoryId is not null)
                 products = products.Where(x => x.CategoryId == categoryId).ToList();
 
+            products = products.OrderByDescending(x => x.CreatedTime).ToList();
             return products;
         }
 

@@ -33,8 +33,10 @@ namespace DunkerFinal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterVM request)
         {
-            if (!ModelState.IsValid) { return View(); }
 
+            request.Username = request.Username.Trim();
+            request.Fullname = request.Fullname.Trim();
+            if (!ModelState.IsValid) { return View(request); }
             AppUser user = new()
             {
                 UserName = request.Username,
@@ -98,7 +100,7 @@ namespace DunkerFinal.Controllers
 
             using var smtp = new SmtpClient();
             smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-            smtp.Authenticate("tofigtn@code.edu.az", "ooru axli vzlb fhrn");
+            smtp.Authenticate("tofigtn@code.edu.az", "ltos famy mrkc gxzw");
             smtp.Send(email);
             smtp.Disconnect(true);
 
@@ -187,7 +189,7 @@ namespace DunkerFinal.Controllers
 
             using var smtp = new SmtpClient();
             smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-            smtp.Authenticate("tofigtn@code.edu.az", "ooru axli vzlb fhrn");
+            smtp.Authenticate("tofigtn@code.edu.az", "ltos famy mrkc gxzw");
             smtp.Send(email);
             smtp.Disconnect(true);
 
