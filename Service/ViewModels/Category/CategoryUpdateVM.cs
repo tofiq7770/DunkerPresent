@@ -5,7 +5,14 @@ namespace Service.ViewModels.Category
     public class CategoryUpdateVM
     {
         public int? Id { get; set; }
+        private string _names = null!;
+
         [Required]
-        public string Name { get; set; }
+        [StringLength(100, MinimumLength = 3, ErrorMessage = "Name must be between 3 and 100 characters.")]
+        public string Name
+        {
+            get => _names;
+            set => _names = value.Trim();
+        }
     }
 }
